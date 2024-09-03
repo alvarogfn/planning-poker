@@ -9,6 +9,7 @@ import { GqlConfigService } from "src/config/gql.config";
 import { GameModule } from "./game/game.module";
 import { NodeModule } from "./node/node.module";
 import { NotifierModule } from "./notifier/notifier.module";
+import { HealthModule } from './health/health.module';
 
 @Module({
 	imports: [
@@ -28,6 +29,7 @@ import { NotifierModule } from "./notifier/notifier.module";
 		NodeModule,
 		GameModule,
 		NotifierModule,
+		HealthModule,
 	],
 })
 export class AppModule {}
