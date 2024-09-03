@@ -11,4 +11,5 @@ pre-commit:
     #      stage_fixed: true
     audit:
       glob: "*.{js,ts,jsx,tsx}"
+      exclude: "(^|/)__generated__$"
       run: pnpm audit --fix {staged_files}
