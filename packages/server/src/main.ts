@@ -1,24 +1,27 @@
-import { NestFactory } from "@nestjs/core";
+import {ConfigService} from "@nestjs/config";
+import {NestFactory} from "@nestjs/core";
 
 import * as cookieParser from "cookie-parser";
-import { AppModule } from "./app.module";
+import {AppModule} from "./app.module";
 
 async function bootstrap() {
-	const app = await NestFactory.create(AppModule, {
-		cors: {
-			origin: [
-				"http://localhost:5173",
-				"http://192.168.44.1:5173",
-				"http://192.168.208.1:5173",
-				"http://192.168.100.145:5173",
-				"http://172.28.160.1:5173",
-			],
-			credentials: true,
-		},
-	});
-	app.use(cookieParser());
-	await app.listen(3000);
+  const app = await NestFactory.create(AppModule);
+  app.use(cookieParser());
+  const configService = app.get(ConfigService);
 
-	console.log("Application is running on: http://localhost:3000/graphql");
+  const port = configService.get<string>('port');
+  const hostname = configService.get<string>('hostname');
+  const origin = configService.get<string>('origin');
+
+  app.enableCors({
+    origin: origin,
+    credentials: true,
+  })
+
+
+  await app.listen(port, hostname);
+
+  console.log(`Application is running on: http://${hostname}:${port}/graphql`);
 }
+
 bootstrap();
