@@ -1,0 +1,111 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CreateGameInput {
+  name: String!
+  votingSystem: ID!
+}
+
+type Credentials {
+  accessToken: String!
+  player: Player!
+}
+
+type Game implements Node {
+  createdBy: Player!
+  currentVotation: Votation!
+  id: ID!
+  name: String!
+  players: [Player!]!
+  votingSystem: VotingSystem!
+}
+
+union GameOrMistake = Game | Mistake
+
+type Mistake {
+  message: String!
+  status: Int!
+}
+
+type Mutation {
+  createGame(createGameInput: CreateGameInput!): Game!
+  createVote(voteInput: VoteInput!): Vote!
+  newVotation(id: ID!): GameOrMistake!
+  revealVotation(votationId: ID!): Votation!
+  signIn: SignInCredentials!
+  signUp(name: String! = ""): Credentials!
+  startVotation(votationId: ID!): Votation!
+  updateGameName(updateGameNameInput: UpdateGameNameInput!): GameOrMistake!
+  updateName(name: String!): Player!
+}
+
+interface Node {
+  id: ID!
+}
+
+type Player implements Node {
+  id: ID!
+  name: String!
+}
+
+type Query {
+  game(id: ID!): GameOrMistake!
+  node(id: ID!): Node
+  player(id: String!): Player!
+  viewer(gameId: ID!): Viewer!
+  vote(id: ID!): Vote!
+  votingSystem(id: String!): VotingSystem!
+  votingSystems(search: String): [VotingSystem!]!
+}
+
+union SignInCredentials = Credentials | Mistake
+
+type Subscription {
+  onNewVote(votationId: ID!): Vote!
+  onUpdatedGame(id: ID!): Game!
+  onUpdatedVotation(votationId: ID!): Votation!
+}
+
+"""
+`Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
+"""
+scalar Timestamp
+
+input UpdateGameNameInput {
+  id: ID!
+  name: String!
+}
+
+type Viewer {
+  id: ID!
+  player: Player!
+  vote: Vote
+}
+
+type Votation implements Node {
+  card: Float!
+  id: ID!
+  revealed: Boolean!
+  started: Boolean!
+  votes: [Vote!]!
+}
+
+type Vote implements Node {
+  card: Float!
+  id: ID!
+  player: Player!
+  revealed: Boolean!
+  votedAt: Timestamp!
+}
+
+input VoteInput {
+  card: Int
+  votationId: ID!
+}
+
+type VotingSystem implements Node {
+  cards: [Float!]!
+  id: ID!
+  name: ID!
+}

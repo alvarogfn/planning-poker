@@ -1,0 +1,8 @@
+{
+	"src": "./",
+	"language": "typescript",
+	"artifactDirectory": "./__generated__",
+	"schema": "../server/schema.gql",
+	"exclude": ["**/node_modules/**", "**/__mocks__/**", "**/__generated__/**"],
+	"eagerEsModules": true
+}
