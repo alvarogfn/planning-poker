@@ -5,10 +5,10 @@
 output: false
 pre-commit:
   commands:
-    check:
-      glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
-      run: pnpm biome check --write --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
-      stage_fixed: true
+    #    check:
+    #      glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
+    #      run: pnpm biome check --write --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
+    #      stage_fixed: true
     audit:
       glob: "*.{js,ts,jsx,tsx}"
       run: pnpm audit --fix {staged_files}

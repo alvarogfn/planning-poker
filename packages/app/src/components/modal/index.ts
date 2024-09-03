@@ -1,3 +1,3 @@
-export { default as Modal } from "./modal";
+export {default as Modal} from "./modal";
 // export * from "./styles";
-// export * from "./declarations";
+// export * from "./types";

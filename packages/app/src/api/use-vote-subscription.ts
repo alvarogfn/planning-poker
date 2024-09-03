@@ -1,5 +1,5 @@
-import {useMemo} from "react";
-import {graphql, useSubscription} from "react-relay";
+import { useMemo } from "react";
+import { graphql, useSubscription } from "react-relay";
 
 const useVoteSubscriptionGraphql = graphql`
   subscription useVoteSubscription($votationId: ID!) {
@@ -12,25 +12,24 @@ const useVoteSubscriptionGraphql = graphql`
       }
     }
   }
-`
+`;
 
 type UseVoteSubscriptionParams = {
-  votationId: string;
-}
+	votationId: string;
+};
 
-function useVoteSubscription({votationId}: UseVoteSubscriptionParams) {
+function useVoteSubscription({ votationId }: UseVoteSubscriptionParams) {
+	const config = useMemo(
+		() => ({
+			subscription: useVoteSubscriptionGraphql,
+			variables: {
+				votationId,
+			},
+		}),
+		[votationId],
+	);
 
-  const config = useMemo(
-      () => ({
-        subscription: useVoteSubscriptionGraphql,
-        variables: {
-          votationId,
-        },
-      }),
-      [votationId],
-  );
-
-  return useSubscription(config);
+	return useSubscription(config);
 }
 
 export default useVoteSubscription;

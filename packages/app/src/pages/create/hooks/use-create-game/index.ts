@@ -1,1 +1,1 @@
-export * from "@/pages/room/hooks/use-room-create-player-mutation/use-room-create-player-mutation";
+export * from './use-create-game-mutation'
