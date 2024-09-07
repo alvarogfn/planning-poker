@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ba310d211662d7511c47771e797e8170>>
+ * @generated SignedSource<<1917965ebc6989a339829c78a3bca3e7>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,10 +14,13 @@ export type useSignInMutation$variables = {
 };
 export type useSignInMutation$data = {
   readonly signUp: {
-    readonly player: {
-      readonly id: string;
-      readonly name: string;
-    };
+    readonly __typename: "Mistake";
+    readonly message: string;
+    readonly status: number;
+  } | {
+    // This will never be '%other', but we need some
+    // value in case none of the concrete values match.
+    readonly __typename: "%other";
   };
 };
 export type useSignInMutation = {
@@ -43,34 +46,37 @@ v1 = [
         "variableName": "name"
       }
     ],
-    "concreteType": "Credentials",
+    "concreteType": null,
     "kind": "LinkedField",
     "name": "signUp",
     "plural": false,
     "selections": [
       {
-        "alias": null,
-        "args": null,
-        "concreteType": "Player",
-        "kind": "LinkedField",
-        "name": "player",
-        "plural": false,
+        "kind": "InlineFragment",
         "selections": [
           {
             "alias": null,
             "args": null,
             "kind": "ScalarField",
-            "name": "id",
+            "name": "status",
             "storageKey": null
           },
           {
             "alias": null,
             "args": null,
             "kind": "ScalarField",
-            "name": "name",
+            "name": "message",
             "storageKey": null
           }
         ],
+        "type": "Mistake",
+        "abstractKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "__typename",
         "storageKey": null
       }
     ],
@@ -95,16 +101,16 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "d72fefab76dcabb629a7b48acaf40c81",
+    "cacheID": "cd42ca0bf8061513da00c7fa37448bfd",
     "id": null,
     "metadata": {},
     "name": "useSignInMutation",
     "operationKind": "mutation",
-    "text": "mutation useSignInMutation(\n  $name: String!\n) {\n  signUp(name: $name) {\n    player {\n      id\n      name\n    }\n  }\n}\n"
+    "text": "mutation useSignInMutation(\n  $name: String!\n) {\n  signUp(name: $name) {\n    ... on Mistake {\n      status\n      message\n    }\n    __typename\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "62372dbf96d48acf2262a337f3c2e69e";
+(node as any).hash = "d7ad52b11281f47f3b52cbc8b596a11c";
 
 export default node;

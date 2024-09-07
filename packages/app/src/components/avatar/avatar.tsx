@@ -1,8 +1,8 @@
-import { StyledAvatar } from "@/components/avatar/styles";
-import type { AvatarProps } from "./types";
+import {StyledAvatar} from "@/components/avatar/styles";
+import type {AvatarProps} from "./types";
 
-const Avatar = ({ size, ...props }: AvatarProps) => {
-	return <StyledAvatar w={size} h={size} {...props} />;
+const Avatar = ({size, ...props}: AvatarProps) => {
+  return <StyledAvatar h={size} w={size} {...props} />;
 };
 
 export default Avatar;
