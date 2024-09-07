@@ -1,11 +1,11 @@
 import { join } from "node:path";
-import { NotifierService } from "@/notifier/notifier.service";
 import { ApolloDriverConfig, ApolloDriverConfigFactory } from "@nestjs/apollo";
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { Request, Response } from "express";
 import { Context as WsContext } from "graphql-ws";
 import { GraphQLFormattedError } from "graphql/error";
+import { NotifierService } from "@/notifier/notifier.service";
 
 type Context = WsContext<Record<string, unknown>, Extra>;
 
@@ -43,7 +43,7 @@ export class GqlConfigService implements ApolloDriverConfigFactory {
 		if (NODE_ENV === "development") return err;
 
 		if (!originalError) return err;
-		return { message: originalError.message, extensions: { statusCode: originalError.statusCode } };
+		return { extensions: { statusCode: originalError.statusCode }, message: originalError.message };
 	}
 
 	private onConnect(context: Context) {
@@ -66,20 +66,20 @@ export class GqlConfigService implements ApolloDriverConfigFactory {
 
 	public createGqlOptions(): ApolloDriverConfig {
 		return {
+			autoSchemaFile: join(process.cwd(), "schema.gql"),
 			buildSchemaOptions: {
 				dateScalarMode: "timestamp",
 			},
-			autoSchemaFile: join(process.cwd(), "schema.gql"),
+			context: ({ req, res }) => ({ req, res }),
+			formatError: (error) => this.formatError(error),
+			sortSchema: true,
 			subscriptions: {
 				"graphql-ws": {
-					onConnect: (context) => this.onConnect(context as Context),
 					onClose: (context) => this.onDisconnect(context as Context),
+					onConnect: (context) => this.onConnect(context as Context),
 					onDisconnect: (context) => this.onDisconnect(context as Context),
 				},
 			},
-			sortSchema: true,
-			formatError: (error) => this.formatError(error),
-			context: ({ req, res }) => ({ req, res }),
 		};
 	}
 }

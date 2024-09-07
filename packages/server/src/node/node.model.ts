@@ -1,11 +1,9 @@
-import { Field, ID, InterfaceType } from "@nestjs/graphql";
+import {Field, ID, InterfaceType} from "@nestjs/graphql";
 
 @InterfaceType({
-	resolveType: (entity) => {
-		return entity.__typename;
-	},
+  resolveType: (entity) => entity.__typename,
 })
 export abstract class Node {
-	@Field((type) => ID)
-	id: string;
+  @Field(() => ID)
+  id: string;
 }

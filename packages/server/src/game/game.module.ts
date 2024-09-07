@@ -1,3 +1,9 @@
+import { Module } from "@nestjs/common";
+import { JwtModule } from "@nestjs/jwt";
+import { MongooseModule } from "@nestjs/mongoose";
+import { GameResolver } from "src/game/resolvers/game.resolver";
+import { GameService } from "./services/game.service";
+import { PlayerService } from "./services/player.service";
 import GameEntity from "@/game/entities/game.entity";
 import PlayerEntity from "@/game/entities/player.entity";
 import VotationEntity from "@/game/entities/votation.entity";
@@ -14,20 +20,15 @@ import { VotationService } from "@/game/services/votation.service";
 import { VoteService } from "@/game/services/vote.service";
 import { VotingSystemService } from "@/game/services/voting-system.service";
 import { NotifierModule } from "@/notifier/notifier.module";
-import { Module } from "@nestjs/common";
-import { JwtModule } from "@nestjs/jwt";
-import { MongooseModule } from "@nestjs/mongoose";
-import { GameResolver } from "src/game/resolvers/game.resolver";
-import { GameService } from "./services/game.service";
-import { PlayerService } from "./services/player.service";
 
 @Module({
+	exports: [GameService, PlayerService, VotingSystemService, ViewerService, VoteService, VotationService],
 	imports: [
 		NotifierModule,
 		JwtModule.register({
+			global: true,
 			secret: "secret",
 			signOptions: { expiresIn: "365d" },
-			global: true,
 		}),
 		MongooseModule.forFeature([PlayerEntity, GameEntity, VotingSystemEntity, VoteEntity, VotationEntity]),
 	],
@@ -46,6 +47,5 @@ import { PlayerService } from "./services/player.service";
 		VotationService,
 		VotationResolver,
 	],
-	exports: [GameService, PlayerService, VotingSystemService, ViewerService, VoteService, VotationService],
 })
 export class GameModule {}

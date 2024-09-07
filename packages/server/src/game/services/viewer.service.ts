@@ -1,8 +1,8 @@
+import { Injectable } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
 import { Credentials } from "@/game/models/credentials.model";
 import { Player } from "@/game/models/player.model";
 import { PlayerService } from "@/game/services/player.service";
-import { Injectable } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
 
 @Injectable()
 export class ViewerService {

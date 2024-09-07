@@ -1,13 +1,9 @@
 import { Document, Types } from "mongoose";
 
 type ObjectIdParams =
-	| Document
-	| { _id: string; [k: string | symbol | number]: unknown }
-	| string
-	| number
-	| {
+	Document | number | string | {
 			id: string;
-	  };
+	  } | { _id: string; [k: number | string | symbol]: unknown };
 
 export function toObjectId(doc: ObjectIdParams): Types.ObjectId {
 	try {
@@ -16,7 +12,7 @@ export function toObjectId(doc: ObjectIdParams): Types.ObjectId {
 		if (typeof doc === "number") return Types.ObjectId.createFromTime(doc);
 		if (doc instanceof Document) return new Types.ObjectId(doc._id.toString());
 		return new Types.ObjectId(doc.id.toString());
-	} catch (e) {
-		throw new Error(`Cannot parse value \n${JSON.stringify(doc)}\n to ObjectId, ${e}`);
+	} catch (error) {
+		throw new Error(`Cannot parse value \n${JSON.stringify(doc)}\n to ObjectId, ${error}`);
 	}
 }

@@ -1,9 +1,9 @@
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import * as mongoose from "mongoose";
 import { Player } from "@/game/entities/player.entity";
 import { Votation } from "@/game/entities/votation.entity";
 import { VotingSystem } from "@/game/entities/voting-system.entity";
 import { withVirtualId } from "@/helpers/with-virtual-id";
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import * as mongoose from "mongoose";
 
 export type GameDocument = mongoose.HydratedDocument<Game>;
 
@@ -14,25 +14,25 @@ export class Game {
 	@Prop()
 	name: string;
 
-	@Prop({ type: mongoose.Types.ObjectId, ref: "Player" })
+	@Prop({ ref: "Player", type: mongoose.Types.ObjectId })
 	createdBy: Player;
 
-	@Prop({ type: mongoose.Types.ObjectId, ref: "VotingSystem" })
+	@Prop({ ref: "VotingSystem", type: mongoose.Types.ObjectId })
 	votingSystem: VotingSystem;
 
-	@Prop([{ type: mongoose.Types.ObjectId, ref: "Votation" }])
+	@Prop([{ ref: "Votation", type: mongoose.Types.ObjectId }])
 	votations: [Votation];
 
-	@Prop({ type: mongoose.Types.ObjectId, ref: "Votation" })
+	@Prop({ ref: "Votation", type: mongoose.Types.ObjectId })
 	currentVotation: Votation;
 
-	@Prop([{ type: mongoose.Types.ObjectId, ref: "Player" }])
+	@Prop([{ ref: "Player", type: mongoose.Types.ObjectId }])
 	players: [Player];
 }
 
 const GameSchema = withVirtualId(SchemaFactory.createForClass(Game));
 
 export default {
-	schema: GameSchema,
 	name: Game.name,
+	schema: GameSchema,
 };

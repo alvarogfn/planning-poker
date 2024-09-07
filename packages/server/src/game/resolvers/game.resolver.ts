@@ -1,3 +1,7 @@
+import { UseGuards } from "@nestjs/common";
+import { Args, ID, Mutation, Parent, Query, ResolveField, Resolver, Subscription } from "@nestjs/graphql";
+import { fromGlobalId, toGlobalId } from "graphql-relay";
+import { CreateGameInput } from "src/game/dto/create-game.input";
 import { Session } from "@/game/decorators/session.decorator";
 import { UpdateGameNameInput } from "@/game/dto/update-game-name.input";
 import { AuthGuard } from "@/game/guard/auth-guard";
@@ -9,10 +13,6 @@ import { NodeIdPipe } from "@/game/pipes/node-id-pipe.service";
 import { GameService } from "@/game/services/game.service";
 import { VotingSystemService } from "@/game/services/voting-system.service";
 import { pubSub } from "@/game/subscriptions/pub-sub";
-import { UseGuards } from "@nestjs/common";
-import { Args, ID, Mutation, Parent, Query, ResolveField, Resolver, Subscription } from "@nestjs/graphql";
-import { fromGlobalId, toGlobalId } from "graphql-relay";
-import { CreateGameInput } from "src/game/dto/create-game.input";
 
 @Resolver(() => Game)
 export class GameResolver {
@@ -46,10 +46,10 @@ export class GameResolver {
 			await pubSub.publish("onUpdatedGame", { onUpdatedGame: game });
 
 			return game;
-		} catch (e) {
+		} catch (error) {
 			return {
+				message: error.message,
 				status: 401,
-				message: e.message,
 			};
 		}
 	}
@@ -57,23 +57,23 @@ export class GameResolver {
 	@UseGuards(AuthGuard)
 	@Mutation(() => Game)
 	public async createGame(
-		@Args("createGameInput") { votingSystem, name }: CreateGameInput,
+		@Args("createGameInput") { name, votingSystem }: CreateGameInput,
 		@Session() auth: Player,
 	): Promise<DeepPartial<Game>> {
 		const { id: votingSystemId } = fromGlobalId(votingSystem);
 
-		return await this.gameService.create({ name, votingSystem: votingSystemId, createdBy: auth.id });
+		return this.gameService.create({ createdBy: auth.id, name, votingSystem: votingSystemId });
 	}
 
 	@Query(() => GameOrMistake)
-	public async game(@Args({ type: () => ID, name: "id" }) id: string): Promise<DeepPartial<GameOrMistake>> {
+	public async game(@Args({ name: "id", type: () => ID }) id: string): Promise<DeepPartial<GameOrMistake>> {
 		try {
 			const game = fromGlobalId(id);
 			return await this.gameService.findById(game.id);
-		} catch (e) {
+		} catch {
 			return {
-				status: 404,
 				message: "Game not found",
+				status: 404,
 			};
 		}
 	}
@@ -81,7 +81,7 @@ export class GameResolver {
 	@UseGuards(AuthGuard)
 	@Mutation(() => GameOrMistake)
 	public async newVotation(
-		@Args({ type: () => ID, name: "id" }, NodeIdPipe) gameId: string,
+		@Args({ name: "id", type: () => ID }, NodeIdPipe) gameId: string,
 	): Promise<DeepPartial<GameOrMistake>> {
 		try {
 			const updatedGame = await this.gameService.newVotation(gameId);
@@ -89,10 +89,10 @@ export class GameResolver {
 			await pubSub.publish("onUpdatedGame", { onUpdatedGame: updatedGame });
 
 			return updatedGame;
-		} catch (e) {
+		} catch (error) {
 			return {
+				message: error.message,
 				status: 404,
-				message: e.message,
 			};
 		}
 	}
@@ -119,17 +119,17 @@ export class GameResolver {
 
 	@ResolveField()
 	public async players(@Parent() game: Game): Promise<DeepPartial<Player>[]> {
-		return await this.gameService.playerFindAll(game);
+		return this.gameService.playerFindAll(game);
 	}
 
 	@ResolveField()
 	public async votingSystem(@Parent() game: Game): Promise<DeepPartial<VotingSystem> | null> {
-		return await this.votingSystemService.findById(String(game.votingSystem));
+		return this.votingSystemService.findById(String(game.votingSystem));
 	}
 
 	@ResolveField()
 	public async currentVotation(@Parent() game: Game): Promise<DeepPartial<Votation>> {
-		return await this.gameService.votationFindById(game);
+		return this.gameService.votationFindById(game);
 	}
 
 	@ResolveField()

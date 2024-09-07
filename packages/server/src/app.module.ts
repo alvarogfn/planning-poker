@@ -1,5 +1,3 @@
-import configuration from "@/config/config";
-import { MongooseConfigService } from "@/config/database.config";
 import { ApolloDriver } from "@nestjs/apollo";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
@@ -10,6 +8,8 @@ import { GameModule } from "./game/game.module";
 import { NodeModule } from "./node/node.module";
 import { NotifierModule } from "./notifier/notifier.module";
 import { HealthModule } from './health/health.module';
+import { MongooseConfigService } from "@/config/database.config";
+import configuration from "@/config/config";
 
 @Module({
 	imports: [
@@ -22,8 +22,8 @@ import { HealthModule } from './health/health.module';
 			useClass: MongooseConfigService,
 		}),
 		GraphQLModule.forRootAsync({
-			imports: [ConfigModule, NotifierModule],
 			driver: ApolloDriver,
+			imports: [ConfigModule, NotifierModule],
 			useClass: GqlConfigService,
 		}),
 		NodeModule,

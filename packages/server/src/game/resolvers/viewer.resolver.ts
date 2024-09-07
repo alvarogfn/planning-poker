@@ -1,3 +1,7 @@
+import { UnauthorizedException, UseGuards } from "@nestjs/common";
+import { Args, ID, Mutation, Parent, Query, ResolveField, Resolver } from "@nestjs/graphql";
+import { JwtService } from "@nestjs/jwt";
+import { toGlobalId } from "graphql-relay";
 import { ClearCookie } from "@/game/decorators/clear-cookie.decorator";
 import { Cookie, ResCookie } from "@/game/decorators/cookie.decorator";
 import { Cookies } from "@/game/decorators/cookies.decorator";
@@ -8,10 +12,6 @@ import { Player } from "@/game/models/player.model";
 import { Viewer } from "@/game/models/viewer.model";
 import { PlayerService } from "@/game/services/player.service";
 import { ViewerService } from "@/game/services/viewer.service";
-import { UnauthorizedException, UseGuards } from "@nestjs/common";
-import { Args, ID, Mutation, Parent, Query, ResolveField, Resolver } from "@nestjs/graphql";
-import { JwtService } from "@nestjs/jwt";
-import { toGlobalId } from "graphql-relay";
 
 @Resolver(() => Viewer)
 export class ViewerResolver {
@@ -24,21 +24,21 @@ export class ViewerResolver {
 	@UseGuards(AuthGuard)
 	@Query(() => Viewer)
 	async viewer(
-		@Args({ type: () => ID, name: "gameId" }) gameId: string,
+		@Args({ name: "gameId", type: () => ID }) gameId: string,
 		@Session() session: Player,
 	): Promise<DeepPartial<Viewer>> {
 		try {
-			const player = await this.playerService.findById(session?.id);
+			const player = await this.playerService.findById(session.id);
 
 			return {
 				id: player.id,
 
 				player: {
-					name: player.name,
 					id: player.id,
+					name: player.name,
 				},
 			};
-		} catch (e) {
+		} catch {
 			throw new UnauthorizedException();
 		}
 	}
@@ -57,11 +57,11 @@ export class ViewerResolver {
 				accessToken: this.jwtService.sign(player),
 				player: player,
 			};
-		} catch (error) {
+		} catch {
 			clearCookie("accessToken");
 			return {
-				status: 401,
 				message: "This token is invalid",
+				status: 401,
 			};
 		}
 	}
@@ -71,8 +71,8 @@ export class ViewerResolver {
 		console.log("name", name);
 		const response = await this.viewerService.signUp(name);
 		cookie("accessToken", response.accessToken, {
-			httpOnly: true,
 			expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
+			httpOnly: true,
 			sameSite: "lax",
 		});
 
@@ -81,7 +81,7 @@ export class ViewerResolver {
 
 	@UseGuards(AuthGuard)
 	@Mutation(() => Player)
-	updateName(@Session() auth: Player, @Args("name") name: string) {
+	async updateName(@Session() auth: Player, @Args("name") name: string) {
 		return this.playerService.updateName(auth.id, name);
 	}
 

@@ -1,7 +1,7 @@
-import { GraphQLContext } from "@/config/gql.config";
-import { ExecutionContext, createParamDecorator } from "@nestjs/common";
+import { createParamDecorator, ExecutionContext } from "@nestjs/common";
 import { GqlExecutionContext } from "@nestjs/graphql";
 import { Response } from "express";
+import { GraphQLContext } from "@/config/gql.config";
 
 export const Cookie = createParamDecorator<unknown, ExecutionContext, Response["cookie"]>(
 	(_, ctx: ExecutionContext) => {

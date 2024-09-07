@@ -1,5 +1,9 @@
 // @ts-nocheck
 
+import { Injectable } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { GraphQLError } from "graphql";
+import { Model } from "mongoose";
 import { CreateGameInput } from "@/game/dto/create-game.input";
 import { UpdateGameNameInput } from "@/game/dto/update-game-name.input";
 import GameEntity, { GameDocument } from "@/game/entities/game.entity";
@@ -11,18 +15,14 @@ import { Player } from "@/game/models/player.model";
 import { Votation } from "@/game/models/votation.model";
 import { Service } from "@/helpers/service.interface";
 import { toObjectId } from "@/helpers/to-object-id";
-import { Injectable } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { GraphQLError } from "graphql";
-import { Model } from "mongoose";
 
 @Injectable()
 export class GameService implements Service<Game> {
 	constructor(
-		@InjectModel(GameEntity.name) private gameModel: Model<GameDocument>,
-		@InjectModel(VotationEntity.name) private votationModel: Model<VotationDocument>,
-		@InjectModel(VoteEntity.name) private voteModel: Model<VoteDocument>,
-		@InjectModel(PlayerEntity.name) private playerModel: Model<PlayerDocument>,
+		@InjectModel(GameEntity.name) private readonly gameModel: Model<GameDocument>,
+		@InjectModel(VotationEntity.name) private readonly votationModel: Model<VotationDocument>,
+		@InjectModel(VoteEntity.name) private readonly voteModel: Model<VoteDocument>,
+		@InjectModel(PlayerEntity.name) private readonly playerModel: Model<PlayerDocument>,
 	) {}
 
 	public async updateName({ id, name, playerId }: UpdateGameNameInput): Promise<DeepPartial<Game>> {
@@ -39,7 +39,7 @@ export class GameService implements Service<Game> {
 			votes: [],
 		});
 
-		return await this.gameModel.findByIdAndUpdate(
+		return this.gameModel.findByIdAndUpdate(
 			toObjectId(gameId),
 			{
 				$push: { votations: toObjectId(votation) },
@@ -52,27 +52,27 @@ export class GameService implements Service<Game> {
 	public async playerFindAll(game: Game): Promise<DeepPartial<Player>[]> {
 		const result = await this.gameModel
 			.findOne({ _id: toObjectId(game.id) })
-			.populate({ path: "players", model: "Player" })
+			.populate({ model: "Player", path: "players" })
 			.select("players");
 
 		return result.players.map((player) => player.toObject());
 	}
 
 	public async votationFindById(game: Game): Promise<DeepPartial<Votation>> {
-		return await this.votationModel.findById(toObjectId(game.currentVotation));
+		return this.votationModel.findById(toObjectId(game.currentVotation));
 	}
 
 	public async findById(id: string): Promise<DeepPartial<Game>> {
-		const game = await this.gameModel.findById(id).populate({ path: "votations", model: "Votation" });
+		const game = await this.gameModel.findById(id).populate({ model: "Votation", path: "votations" });
 
 		return game.toObject();
 	}
 
-	public async create({ name, votingSystem, createdBy }: CreateGameInput): Promise<DeepPartial<Game>> {
+	public async create({ createdBy, name, votingSystem }: CreateGameInput): Promise<DeepPartial<Game>> {
 		const game = await this.gameModel.create({
+			createdBy: toObjectId(createdBy),
 			name,
 			votingSystem: toObjectId(votingSystem),
-			createdBy: toObjectId(createdBy),
 		});
 
 		const votation = await this.votationModel.create({

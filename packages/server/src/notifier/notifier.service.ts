@@ -1,29 +1,38 @@
-import { Injectable } from "@nestjs/common";
+import {Injectable, LoggerService} from "@nestjs/common";
 
-type SubscriptionCallback = (payload: unknown) => void | Promise<void>;
+type SubscriptionCallback = (payload: unknown) => Promise<void> | void;
 
 @Injectable()
 export class NotifierService {
-	private subscriptions = new Map<string, SubscriptionCallback[]>();
+  constructor(
+      private readonly logger: LoggerService
+  ) {
+  }
 
-	public subscribe(event: string, callback: SubscriptionCallback) {
-		const current = this.subscriptions.get(event) || [];
-		this.subscriptions.set(event, [...current, callback]);
-	}
+  public subscribe(event: string, callback: SubscriptionCallback) {
+    const current = this.subscriptions.get(event);
+    this.subscriptions.set(event, [...current, callback]);
+  }
 
-	public unsubscribe(event: string, callback: SubscriptionCallback) {
-		const current = this.subscriptions.get(event) || [];
-		this.subscriptions.set(
-			event,
-			current.filter((cb) => cb !== callback),
-		);
-	}
+  public unsubscribe(event: string, callback: SubscriptionCallback) {
+    const current = this.subscriptions.get(event);
+    this.subscriptions.set(
+        event,
+        current.filter((cb) => cb !== callback),
+    );
+  }
 
-	public publish(event: string, payload: unknown) {
-		const callbacks = this.subscriptions.get(event) || [];
+  public async publish(event: string, payload: unknown) {
+    const callbacks = this.subscriptions.get(event);
 
-		for (const callback of callbacks) {
-			callback(payload);
-		}
-	}
+    for (const callback of callbacks) {
+      try {
+        await callback(payload)
+      } catch (error) {
+        this.logger.warn(`Error in callback for event ${event}`, error);
+      }
+    }
+  }
+
+  private readonly subscriptions = new Map<string, SubscriptionCallback[]>();
 }

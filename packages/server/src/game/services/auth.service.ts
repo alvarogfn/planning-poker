@@ -1,13 +1,13 @@
-import GameEntity, { GameDocument } from "@/game/entities/game.entity";
-import { PlayerDocument, Player as PlayerEntity } from "@/game/entities/player.entity";
-import { pubSub } from "@/game/subscriptions/pub-sub";
-import { toObjectId } from "@/helpers/to-object-id";
-import { NotifierService } from "@/notifier/notifier.service";
 import { Injectable, OnModuleInit } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { InjectModel } from "@nestjs/mongoose";
 import { fromGlobalId } from "graphql-relay";
 import { Model } from "mongoose";
+import GameEntity, { GameDocument } from "@/game/entities/game.entity";
+import { PlayerDocument, Player as PlayerEntity } from "@/game/entities/player.entity";
+import { pubSub } from "@/game/subscriptions/pub-sub";
+import { toObjectId } from "@/helpers/to-object-id";
+import { NotifierService } from "@/notifier/notifier.service";
 
 type ConnectionParams = { accessToken: string; location: string };
 
@@ -16,8 +16,8 @@ export class AuthService implements OnModuleInit {
 	constructor(
 		private readonly notifierService: NotifierService,
 		private readonly jwtService: JwtService,
-		@InjectModel(PlayerEntity.name) private playerModel: Model<PlayerDocument>,
-		@InjectModel(GameEntity.name) private gameModel: Model<GameDocument>,
+		@InjectModel(PlayerEntity.name) private readonly playerModel: Model<PlayerDocument>,
+		@InjectModel(GameEntity.name) private readonly gameModel: Model<GameDocument>,
 	) {}
 
 	public decodeSync<T extends object>(accessToken: string): T {
@@ -58,6 +58,6 @@ export class AuthService implements OnModuleInit {
 	}
 
 	onModuleInit() {
-		this.notifierService.subscribe("onConnect", (data: ConnectionParams) => this.updateStatus(data));
+		this.notifierService.subscribe("onConnect", async (data: ConnectionParams) => this.updateStatus(data));
 	}
 }

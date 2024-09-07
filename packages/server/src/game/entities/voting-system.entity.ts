@@ -1,6 +1,6 @@
-import { withVirtualId } from "@/helpers/with-virtual-id";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { HydratedDocument, Types } from "mongoose";
+import { withVirtualId } from "@/helpers/with-virtual-id";
 
 export type VotingSystemDocument = HydratedDocument<VotingSystem>;
 
@@ -18,6 +18,6 @@ export class VotingSystem {
 const VotingSystemSchema = withVirtualId(SchemaFactory.createForClass(VotingSystem));
 
 export default {
-	schema: VotingSystemSchema,
 	name: VotingSystem.name,
+	schema: VotingSystemSchema,
 };

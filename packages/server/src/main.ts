@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import {ConfigService} from "@nestjs/config";
 import {NestFactory} from "@nestjs/core";
 
@@ -14,8 +15,8 @@ async function bootstrap() {
   const origin = configService.get<string>('origin');
 
   app.enableCors({
-    origin: origin,
     credentials: true,
+    origin: origin,
   })
 
 
@@ -24,4 +25,4 @@ async function bootstrap() {
   console.log(`Application is running on: http://${hostname}:${port}/graphql`);
 }
 
-bootstrap();
+bootstrap().catch(console.error);

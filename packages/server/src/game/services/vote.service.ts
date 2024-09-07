@@ -1,3 +1,6 @@
+import { Injectable } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
 import { VoteInput } from "@/game/dto/vote.input";
 import PlayerEntity, { PlayerDocument } from "@/game/entities/player.entity";
 import VotationEntity, { VotationDocument } from "@/game/entities/votation.entity";
@@ -7,20 +10,17 @@ import { Votation } from "@/game/models/votation.model";
 import { Vote } from "@/game/models/vote.model";
 import { Service } from "@/helpers/service.interface";
 import { toObjectId } from "@/helpers/to-object-id";
-import { Injectable } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
 
 @Injectable()
 export class VoteService implements Service<Vote> {
 	constructor(
-		@InjectModel(VoteEntity.name) private voteModel: Model<VoteDocument>,
-		@InjectModel(VotationEntity.name) private votationModel: Model<VotationDocument>,
-		@InjectModel(PlayerEntity.name) private playerModel: Model<PlayerDocument>,
+		@InjectModel(VoteEntity.name) private readonly voteModel: Model<VoteDocument>,
+		@InjectModel(VotationEntity.name) private readonly votationModel: Model<VotationDocument>,
+		@InjectModel(PlayerEntity.name) private readonly playerModel: Model<PlayerDocument>,
 	) {}
 
 	public async playerFindById(vote: Vote): Promise<DeepPartial<Player>> {
-		return await this.playerModel.findById(vote.player);
+		return this.playerModel.findById(vote.player);
 	}
 
 	public async votationFindById(vote: Vote): Promise<DeepPartial<Votation>> {
@@ -37,13 +37,13 @@ export class VoteService implements Service<Vote> {
 
 		const currentVote = await this.voteModel.findOneAndUpdate(
 			{
-				votation: toObjectId(votationId),
 				player: toObjectId(playerId),
+				votation: toObjectId(votationId),
 			},
 			{
 				card: card,
 			},
-			{ upsert: true, new: true, setDefaultsOnInsert: true },
+			{ new: true, setDefaultsOnInsert: true, upsert: true },
 		);
 
 		await votation.updateOne({
@@ -54,6 +54,6 @@ export class VoteService implements Service<Vote> {
 	}
 
 	public async findById(id: string): Promise<DeepPartial<Vote>> {
-		return await this.voteModel.findById(toObjectId(id));
+		return this.voteModel.findById(toObjectId(id));
 	}
 }

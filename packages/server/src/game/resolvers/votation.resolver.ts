@@ -1,8 +1,8 @@
+import { Args, ID, Mutation, Parent, ResolveField, Resolver, Subscription } from "@nestjs/graphql";
+import { fromGlobalId, toGlobalId } from "graphql-relay";
 import { Votation } from "@/game/models/votation.model";
 import { VotationService } from "@/game/services/votation.service";
 import { pubSub } from "@/game/subscriptions/pub-sub";
-import { Args, ID, Mutation, Parent, ResolveField, Resolver, Subscription } from "@nestjs/graphql";
-import { fromGlobalId, toGlobalId } from "graphql-relay";
 
 @Resolver(() => Votation)
 export class VotationResolver {

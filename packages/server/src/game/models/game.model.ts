@@ -1,9 +1,9 @@
-import { Player } from "@/game/models/player.model";
-import { Votation } from "@/game/models/votation.model";
-import { makeMistakable } from "@/helpers/make-mistakable";
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 import { Node } from "src/node/node.model";
 import { VotingSystem } from "./voting-system.model";
+import { Player } from "@/game/models/player.model";
+import { Votation } from "@/game/models/votation.model";
+import { makeMistakable } from "@/helpers/make-mistakable";
 
 @ObjectType({ implements: () => Node })
 export class Game extends Node {

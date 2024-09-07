@@ -13,13 +13,13 @@ export function withVirtualId<T extends Schema>(schema: T): T {
 	};
 
 	schema.set("toObject", {
-		virtuals: true,
 		transform,
+		virtuals: true,
 	});
 
 	schema.set("toJSON", {
-		virtuals: true,
 		transform,
+		virtuals: true,
 	});
 
 	return schema;

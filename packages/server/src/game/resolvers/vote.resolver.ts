@@ -1,3 +1,6 @@
+import { UseGuards } from "@nestjs/common";
+import { Args, ID, Mutation, Parent, Query, ResolveField, Resolver, Subscription } from "@nestjs/graphql";
+import { fromGlobalId, toGlobalId } from "graphql-relay";
 import { Session } from "@/game/decorators/session.decorator";
 import { VoteInput } from "@/game/dto/vote.input";
 import { AuthGuard } from "@/game/guard/auth-guard";
@@ -7,9 +10,6 @@ import { NodeIdPipe } from "@/game/pipes/node-id-pipe.service";
 import { VoteService } from "@/game/services/vote.service";
 import { pubSub } from "@/game/subscriptions/pub-sub";
 import { compare } from "@/helpers/compare";
-import { UseGuards } from "@nestjs/common";
-import { Args, ID, Mutation, Parent, Query, ResolveField, Resolver, Subscription } from "@nestjs/graphql";
-import { fromGlobalId, toGlobalId } from "graphql-relay";
 
 @Resolver(() => Vote)
 export class VoteResolver {
@@ -28,15 +28,15 @@ export class VoteResolver {
 	@UseGuards(AuthGuard)
 	@Query(() => Vote)
 	public async vote(@Args({ name: "id", type: () => ID }, NodeIdPipe) id: string) {
-		return await this.voteService.findById(id);
+		return this.voteService.findById(id);
 	}
 
 	@UseGuards(AuthGuard)
 	@Mutation(() => Vote)
-	public async createVote(@Args("voteInput") { votationId, card }: VoteInput, @Session() viewer: Player) {
+	public async createVote(@Args("voteInput") { card, votationId }: VoteInput, @Session() viewer: Player) {
 		const votation = fromGlobalId(votationId);
 
-		const vote = await this.voteService.createVote({ playerId: viewer.id, votationId: votation.id, card });
+		const vote = await this.voteService.createVote({ card, playerId: viewer.id, votationId: votation.id });
 		const newVotation = await this.voteService.votationFindById(vote as Vote);
 
 		await pubSub.publish("onUpdatedVotation", { onUpdatedVotation: newVotation });
@@ -59,6 +59,6 @@ export class VoteResolver {
 
 	@ResolveField()
 	public async player(@Parent() vote: Vote): Promise<DeepPartial<Player>> {
-		return await this.voteService.playerFindById(vote);
+		return this.voteService.playerFindById(vote);
 	}
 }

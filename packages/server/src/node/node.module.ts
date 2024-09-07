@@ -1,10 +1,10 @@
-import { GameModule } from "@/game/game.module";
 import { Module } from "@nestjs/common";
 import { NodeResolver } from "src/node/node.resolver";
+import { GameModule } from "@/game/game.module";
 
 @Module({
-	providers: [NodeResolver],
-	imports: [GameModule],
 	exports: [NodeModule],
+	imports: [GameModule],
+	providers: [NodeResolver],
 })
 export class NodeModule {}

@@ -1,12 +1,12 @@
-import { PlayerDocument, Player as PlayerEntity } from "@/game/entities/player.entity";
-import { Player } from "@/game/models/player.model";
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
+import { Player } from "@/game/models/player.model";
+import { PlayerDocument, Player as PlayerEntity } from "@/game/entities/player.entity";
 
 @Injectable()
 export class PlayerService {
-	constructor(@InjectModel(PlayerEntity.name) private playerModel: Model<PlayerDocument>) {}
+	constructor(@InjectModel(PlayerEntity.name) private readonly playerModel: Model<PlayerDocument>) {}
 
 	public async findById(id: unknown): Promise<DeepPartial<Player>> {
 		const player = await this.playerModel.findById(id);

@@ -1,5 +1,5 @@
-import { Node } from "@/node/node.model";
 import { Field, ID, ObjectType } from "@nestjs/graphql";
+import { Node } from "@/node/node.model";
 
 @ObjectType({
 	implements: () => Node,

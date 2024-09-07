@@ -1,6 +1,6 @@
-import { withVirtualId } from "@/helpers/with-virtual-id";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { HydratedDocument, Types } from "mongoose";
+import { withVirtualId } from "@/helpers/with-virtual-id";
 
 export type PlayerDocument = HydratedDocument<Player>;
 
@@ -19,6 +19,6 @@ export class Player {
 export const PlayerSchema = withVirtualId(SchemaFactory.createForClass(Player));
 
 export default {
-	schema: PlayerSchema,
 	name: Player.name,
+	schema: PlayerSchema,
 };
