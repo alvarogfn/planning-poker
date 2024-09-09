@@ -93,7 +93,7 @@ type Votation implements Node {
 }
 
 type Vote implements Node {
-  card: Float
+  card: String
   id: ID!
   player: Player!
   revealed: Boolean!
@@ -106,7 +106,7 @@ input VoteInput {
 }
 
 type VotingSystem implements Node {
-  cards: [Float!]!
+  cards: [String!]!
   id: ID!
   name: ID!
 }

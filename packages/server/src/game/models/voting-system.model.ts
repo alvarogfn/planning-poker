@@ -2,15 +2,15 @@ import { Field, ID, ObjectType } from "@nestjs/graphql";
 import { Node } from "@/node/node.model";
 
 @ObjectType({
-	implements: () => Node,
+  implements: () => Node,
 })
 export class VotingSystem extends Node {
-	@Field(() => ID)
-	id: string;
+  @Field(() => ID)
+  id: string;
 
-	@Field(() => ID)
-	name: string;
+  @Field(() => ID)
+  name: string;
 
-	@Field(() => [Number])
-	cards: number[];
+  @Field(() => [String])
+  cards: string[];
 }

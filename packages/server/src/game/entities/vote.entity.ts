@@ -13,8 +13,8 @@ export class Vote {
   @Prop({ ref: "Player", type: mongoose.Types.ObjectId })
   player: Player;
 
-  @Prop({ default: null })
-  card: number | null;
+  @Prop({ default: null, type: String })
+  card: string | null;
 
   @Prop({ ref: "Votation", type: mongoose.Types.ObjectId })
   votation: Votation;

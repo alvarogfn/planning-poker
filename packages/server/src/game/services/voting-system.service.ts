@@ -17,7 +17,13 @@ export class VotingSystemService {
   public async findById(id: string): Promise<DeepPartial<VotingSystem>> {
     const votingSystem = await this.votingSystemModel.findById(id);
 
-    return Object.assign(votingSystem, { cards: votingSystem.cards.sort((a, b) => a - b) });
+    return Object.assign(votingSystem, {
+      cards: votingSystem.cards.sort((a, b) => {
+        const someIsNaN = Number.isNaN(Number(a)) || Number.isNaN(Number(b));
+        if (someIsNaN) return 1;
+        return Number(a) - Number(b);
+      }),
+    });
   }
 
   public async findAll(search?: string): Promise<DeepPartial<VotingSystem>[]> {

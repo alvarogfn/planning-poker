@@ -6,18 +6,18 @@ export type VotingSystemDocument = HydratedDocument<VotingSystem>;
 
 @Schema()
 export class VotingSystem {
-	_id: Types.ObjectId;
+  _id: Types.ObjectId;
 
-	@Prop({ index: "text" })
-	name: string;
+  @Prop({ index: "text" })
+  name: string;
 
-	@Prop({ raw: [Number] })
-	cards: number[];
+  @Prop({ raw: [String] })
+  cards: string[];
 }
 
 const VotingSystemSchema = withVirtualId(SchemaFactory.createForClass(VotingSystem));
 
 export default {
-	name: VotingSystem.name,
-	schema: VotingSystemSchema,
+  name: VotingSystem.name,
+  schema: VotingSystemSchema,
 };

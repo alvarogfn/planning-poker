@@ -11,8 +11,8 @@ export class Vote extends Node {
   @Field(() => GraphQLTimestamp)
   votedAt: Date;
 
-  @Field(() => Number, { nullable: true })
-  card?: number;
+  @Field(() => String, { nullable: true })
+  card?: string;
 
   @Field(() => Player)
   player: Player;
