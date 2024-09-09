@@ -4,12 +4,13 @@ import { Vote } from "@/game/models/vote.model";
 
 @ObjectType()
 export class Viewer {
-	@Field(() => ID)
-	id: string;
+  @Field(() => ID)
+  id: string;
 
-	@Field(() => Player)
-	player: Player;
+  @Field(() => String)
+  @Field(() => Player)
+  player: Player;
 
-	@Field(() => Vote, { nullable: true })
-	vote?: Vote;
+  @Field(() => Vote, { nullable: true })
+  vote?: Vote;
 }

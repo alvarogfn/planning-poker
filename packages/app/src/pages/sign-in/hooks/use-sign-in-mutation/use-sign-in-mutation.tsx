@@ -1,7 +1,4 @@
-import {
-  useSignInMutation as MutationType,
-  useSignInMutation$variables,
-} from "generated/useSignInMutation.graphql";
+import { useSignInMutation as MutationType, useSignInMutation$variables } from "generated/useSignInMutation.graphql";
 import { useState } from "react";
 import { graphql, useMutation } from "react-relay";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -21,27 +18,24 @@ const useSignInMutationGraphql = graphql`
 `;
 
 function useSignInMutation() {
-  const [mistake, setMistake] = useState<any>(null);
-  const [mutation, isLoading] = useMutation<MutationType>(
-    useSignInMutationGraphql,
-  );
+  const [mistake, setMistake] = useState<Mistake | null>(null);
+  const [mutation, isLoading] = useMutation<MutationType>(useSignInMutationGraphql);
   const { state } = useLocation();
   const { setIsAuth } = useAuthContext();
   const navigate = useNavigate();
 
   const mutate = (variables: useSignInMutation$variables) =>
     mutation({
-      onCompleted: (response) => {
-        if (response.signUp.__typename === "Mistake") {
-          setMistake(response.signUp);
+      onCompleted: ({ signUp }) => {
+        if (signUp.__typename === "Mistake") {
+          setMistake({ message: signUp.message, status: signUp.status });
         } else {
           navigate(state?.redirectTo || "/");
           setIsAuth(true);
         }
       },
       onError: (response) => {
-        setMistake(response);
-        navigate({ search: "?mistake=1" });
+        setMistake({ message: response.message, status: response.name });
         setIsAuth(false);
       },
       variables,

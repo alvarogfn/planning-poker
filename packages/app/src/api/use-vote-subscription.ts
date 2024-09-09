@@ -1,11 +1,13 @@
+import { useVoteSubscription$variables } from "generated/useVoteSubscription.graphql";
 import { useMemo } from "react";
 import { graphql, useSubscription } from "react-relay";
 
 const useVoteSubscriptionGraphql = graphql`
-  subscription useVoteSubscription($votationId: ID!) {
-    onNewVote(votationId: $votationId) {
+  subscription useVoteSubscription($voteId: ID!) {
+    onNewVote(voteId: $voteId) {
       id
       card
+      revealed
       player {
         name
         id
@@ -15,21 +17,19 @@ const useVoteSubscriptionGraphql = graphql`
 `;
 
 type UseVoteSubscriptionParams = {
-	votationId: string;
+  variables: useVoteSubscription$variables;
 };
 
-function useVoteSubscription({ votationId }: UseVoteSubscriptionParams) {
-	const config = useMemo(
-		() => ({
-			subscription: useVoteSubscriptionGraphql,
-			variables: {
-				votationId,
-			},
-		}),
-		[votationId],
-	);
+function useVoteSubscription({ variables }: UseVoteSubscriptionParams) {
+  const config = useMemo(
+    () => ({
+      subscription: useVoteSubscriptionGraphql,
+      variables: variables,
+    }),
+    [variables],
+  );
 
-	return useSubscription(config);
+  return useSubscription(config);
 }
 
 export default useVoteSubscription;

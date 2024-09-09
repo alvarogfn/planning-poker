@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1e3f17e0d513388858bce858d46aee06>>
+ * @generated SignedSource<<ed8b5202517071e3559cf13633451c51>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,7 +10,7 @@
 
 import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type GameCardDeckTableFragment$data = {
+export type GameViewerDeckFragment$data = {
   readonly currentVotation: {
     readonly id: string;
     readonly revealed: boolean;
@@ -19,18 +19,18 @@ export type GameCardDeckTableFragment$data = {
   readonly votingSystem: {
     readonly cards: ReadonlyArray<number>;
   };
-  readonly " $fragmentType": "GameCardDeckTableFragment";
+  readonly " $fragmentType": "GameViewerDeckFragment";
 };
-export type GameCardDeckTableFragment$key = {
-  readonly " $data"?: GameCardDeckTableFragment$data;
-  readonly " $fragmentSpreads": FragmentRefs<"GameCardDeckTableFragment">;
+export type GameViewerDeckFragment$key = {
+  readonly " $data"?: GameViewerDeckFragment$data;
+  readonly " $fragmentSpreads": FragmentRefs<"GameViewerDeckFragment">;
 };
 
 const node: ReaderFragment = {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
-  "name": "GameCardDeckTableFragment",
+  "name": "GameViewerDeckFragment",
   "selections": [
     {
       "alias": null,
@@ -69,14 +69,14 @@ const node: ReaderFragment = {
           "alias": null,
           "args": null,
           "kind": "ScalarField",
-          "name": "started",
+          "name": "revealed",
           "storageKey": null
         },
         {
           "alias": null,
           "args": null,
           "kind": "ScalarField",
-          "name": "revealed",
+          "name": "started",
           "storageKey": null
         }
       ],
@@ -87,6 +87,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "2387855defc7a5c0fa29283595c52fca";
+(node as any).hash = "0ffaa4f22657c2f252562033bf4c9049";
 
 export default node;

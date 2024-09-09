@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<60826429a84144ce62894a33e271e72b>>
+ * @generated SignedSource<<218c57e5f8824a9d34305b49d3ea37c0>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,17 +15,22 @@ export type GamePageQueryGraphqlQuery$variables = {
 };
 export type GamePageQueryGraphqlQuery$data = {
   readonly game: {
-    readonly message?: string;
-    readonly players?: ReadonlyArray<{
+    readonly __typename: "Game";
+    readonly currentVotation: {
+      readonly " $fragmentSpreads": FragmentRefs<"GameTableActionsFragment">;
+    };
+    readonly players: ReadonlyArray<{
       readonly id: string;
     }>;
-    readonly status?: number;
-    readonly " $fragmentSpreads": FragmentRefs<"GameCardDeckTableFragment" | "GameSettingsPopoverFragment" | "GameVotationTableFragment">;
-  };
-  readonly viewer: {
-    readonly player: {
-      readonly id: string;
-    };
+    readonly " $fragmentSpreads": FragmentRefs<"GameSettingsPopoverFragment" | "GameViewerDeckFragment" | "GameVotationTableFragment">;
+  } | {
+    readonly __typename: "Mistake";
+    readonly message: string;
+    readonly status: string;
+  } | {
+    // This will never be '%other', but we need some
+    // value in case none of the concrete values match.
+    readonly __typename: "%other";
   };
 };
 export type GamePageQueryGraphqlQuery = {
@@ -44,7 +49,7 @@ var v0 = [
 v1 = [
   {
     "kind": "Variable",
-    "name": "gameId",
+    "name": "id",
     "variableName": "id"
   }
 ],
@@ -52,29 +57,29 @@ v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
+  "name": "__typename",
+  "storageKey": null
+},
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 },
-v3 = [
-  (v2/*: any*/)
+v4 = [
+  (v3/*: any*/)
 ],
-v4 = {
+v5 = {
   "alias": null,
   "args": null,
   "concreteType": "Player",
   "kind": "LinkedField",
-  "name": "player",
-  "plural": false,
-  "selections": (v3/*: any*/),
+  "name": "players",
+  "plural": true,
+  "selections": (v4/*: any*/),
   "storageKey": null
 },
-v5 = [
-  {
-    "kind": "Variable",
-    "name": "id",
-    "variableName": "id"
-  }
-],
 v6 = {
   "kind": "InlineFragment",
   "selections": [
@@ -95,18 +100,7 @@ v6 = {
   ],
   "type": "Mistake",
   "abstractKey": null
-},
-v7 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "name",
-  "storageKey": null
-},
-v8 = [
-  (v2/*: any*/),
-  (v7/*: any*/)
-];
+};
 return {
   "fragment": {
     "argumentDefinitions": (v0/*: any*/),
@@ -117,45 +111,41 @@ return {
       {
         "alias": null,
         "args": (v1/*: any*/),
-        "concreteType": "Viewer",
-        "kind": "LinkedField",
-        "name": "viewer",
-        "plural": false,
-        "selections": [
-          (v4/*: any*/)
-        ],
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": (v5/*: any*/),
         "concreteType": null,
         "kind": "LinkedField",
         "name": "game",
         "plural": false,
         "selections": [
+          (v2/*: any*/),
           {
             "kind": "InlineFragment",
             "selections": [
               {
+                "args": null,
+                "kind": "FragmentSpread",
+                "name": "GameViewerDeckFragment"
+              },
+              (v5/*: any*/),
+              {
                 "alias": null,
                 "args": null,
-                "concreteType": "Player",
+                "concreteType": "Votation",
                 "kind": "LinkedField",
-                "name": "players",
-                "plural": true,
-                "selections": (v3/*: any*/),
+                "name": "currentVotation",
+                "plural": false,
+                "selections": [
+                  {
+                    "args": null,
+                    "kind": "FragmentSpread",
+                    "name": "GameTableActionsFragment"
+                  }
+                ],
                 "storageKey": null
               },
               {
                 "args": null,
                 "kind": "FragmentSpread",
                 "name": "GameSettingsPopoverFragment"
-              },
-              {
-                "args": null,
-                "kind": "FragmentSpread",
-                "name": "GameCardDeckTableFragment"
               },
               {
                 "args": null,
@@ -183,45 +173,15 @@ return {
       {
         "alias": null,
         "args": (v1/*: any*/),
-        "concreteType": "Viewer",
-        "kind": "LinkedField",
-        "name": "viewer",
-        "plural": false,
-        "selections": [
-          (v4/*: any*/),
-          (v2/*: any*/)
-        ],
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": (v5/*: any*/),
         "concreteType": null,
         "kind": "LinkedField",
         "name": "game",
         "plural": false,
         "selections": [
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "__typename",
-            "storageKey": null
-          },
+          (v2/*: any*/),
           {
             "kind": "InlineFragment",
             "selections": [
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "Player",
-                "kind": "LinkedField",
-                "name": "players",
-                "plural": true,
-                "selections": (v8/*: any*/),
-                "storageKey": null
-              },
-              (v7/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -237,7 +197,7 @@ return {
                     "name": "cards",
                     "storageKey": null
                   },
-                  (v2/*: any*/)
+                  (v3/*: any*/)
                 ],
                 "storageKey": null
               },
@@ -249,14 +209,7 @@ return {
                 "name": "currentVotation",
                 "plural": false,
                 "selections": [
-                  (v2/*: any*/),
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "started",
-                    "storageKey": null
-                  },
+                  (v3/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -267,33 +220,19 @@ return {
                   {
                     "alias": null,
                     "args": null,
-                    "concreteType": "Vote",
-                    "kind": "LinkedField",
-                    "name": "votes",
-                    "plural": true,
-                    "selections": [
-                      {
-                        "alias": null,
-                        "args": null,
-                        "concreteType": "Player",
-                        "kind": "LinkedField",
-                        "name": "player",
-                        "plural": false,
-                        "selections": (v8/*: any*/),
-                        "storageKey": null
-                      },
-                      (v2/*: any*/),
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "card",
-                        "storageKey": null
-                      }
-                    ],
+                    "kind": "ScalarField",
+                    "name": "started",
                     "storageKey": null
                   }
                 ],
+                "storageKey": null
+              },
+              (v5/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "name",
                 "storageKey": null
               }
             ],
@@ -303,7 +242,7 @@ return {
           (v6/*: any*/),
           {
             "kind": "InlineFragment",
-            "selections": (v3/*: any*/),
+            "selections": (v4/*: any*/),
             "type": "Node",
             "abstractKey": "__isNode"
           }
@@ -313,16 +252,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "977dd13bdae98865b841ceca42aac204",
+    "cacheID": "1d54003efe064c880d3bb74ae0d97bae",
     "id": null,
     "metadata": {},
     "name": "GamePageQueryGraphqlQuery",
     "operationKind": "query",
-    "text": "query GamePageQueryGraphqlQuery(\n  $id: ID!\n) {\n  viewer(gameId: $id) {\n    player {\n      id\n    }\n    id\n  }\n  game(id: $id) {\n    __typename\n    ... on Game {\n      players {\n        id\n      }\n      ...GameSettingsPopoverFragment\n      ...GameCardDeckTableFragment\n      ...GameVotationTableFragment\n    }\n    ... on Mistake {\n      message\n      status\n    }\n    ... on Node {\n      __isNode: __typename\n      id\n    }\n  }\n}\n\nfragment GameCardDeckTableFragment on Game {\n  votingSystem {\n    cards\n    id\n  }\n  currentVotation {\n    id\n    started\n    revealed\n  }\n}\n\nfragment GameSettingsPopoverFragment on Game {\n  name\n}\n\nfragment GameTableActionsFragment on Votation {\n  id\n  started\n  revealed\n}\n\nfragment GameViewerDeckCardFragment on Vote {\n  player {\n    id\n    name\n  }\n  id\n  card\n}\n\nfragment GameVotationTableFragment on Game {\n  players {\n    name\n    id\n  }\n  currentVotation {\n    ...GameTableActionsFragment\n    revealed\n    id\n    votes {\n      player {\n        id\n      }\n      ...GameViewerDeckCardFragment\n      id\n    }\n  }\n}\n"
+    "text": "query GamePageQueryGraphqlQuery(\n  $id: ID!\n) {\n  game(id: $id) {\n    __typename\n    ... on Game {\n      ...GameViewerDeckFragment\n      players {\n        id\n      }\n      currentVotation {\n        ...GameTableActionsFragment\n        id\n      }\n      ...GameSettingsPopoverFragment\n      ...GameVotationTableFragment\n    }\n    ... on Mistake {\n      message\n      status\n    }\n    ... on Node {\n      __isNode: __typename\n      id\n    }\n  }\n}\n\nfragment GameSettingsPopoverFragment on Game {\n  name\n}\n\nfragment GameTableActionsFragment on Votation {\n  id\n  started\n  revealed\n}\n\nfragment GameViewerDeckFragment on Game {\n  votingSystem {\n    cards\n    id\n  }\n  currentVotation {\n    id\n    revealed\n    started\n  }\n}\n\nfragment GameVotationTableFragment on Game {\n  players {\n    id\n  }\n  currentVotation {\n    ...GameTableActionsFragment\n    revealed\n    id\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "80dedcb8165a7a4db73cb07979088d0b";
+(node as any).hash = "5fb6f3ef2019e8b4e2fe90b1bc975ae3";
 
 export default node;

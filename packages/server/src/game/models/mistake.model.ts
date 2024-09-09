@@ -1,10 +1,10 @@
-import { Field, Int, ObjectType } from "@nestjs/graphql";
+import { Field, ObjectType } from "@nestjs/graphql";
 
 @ObjectType()
 export class Mistake {
-	@Field(() => Int)
-	status: number;
+  @Field(() => String)
+  status: string;
 
-	@Field(() => String)
-	message: string;
+  @Field(() => String)
+  message: string;
 }

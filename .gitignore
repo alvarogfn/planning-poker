@@ -9,7 +9,7 @@ logs
 npm-debug.log*
 pnpm-debug.log*
 yarn-debug.log*
-yarn-error.log*
+yarn-mistake.log*
 lerna-debug.log*
 
 # OS
@@ -46,7 +46,7 @@ lerna-debug.log*
 .temp
 .tmp
 
-# Runtime error
+# Runtime mistake
 pids
 *.pid
 *.seed

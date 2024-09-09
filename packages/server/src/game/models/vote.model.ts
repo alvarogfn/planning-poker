@@ -5,20 +5,20 @@ import { makeMistakable } from "@/helpers/make-mistakable";
 
 @ObjectType({ implements: Node })
 export class Vote extends Node {
-	@Field(() => ID)
-	id: string;
+  @Field(() => ID)
+  id: string;
 
-	@Field(() => GraphQLTimestamp)
-	votedAt: Date;
+  @Field(() => GraphQLTimestamp)
+  votedAt: Date;
 
-	@Field(() => Number)
-	card: number;
+  @Field(() => Number, { nullable: true })
+  card?: number;
 
-	@Field(() => Player)
-	player: Player;
+  @Field(() => Player)
+  player: Player;
 
-	@Field(() => Boolean)
-	revealed: boolean;
+  @Field(() => Boolean)
+  revealed: boolean;
 }
 
 export const VoteOrMistake = makeMistakable(Vote);

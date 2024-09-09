@@ -1,17 +1,21 @@
-import styled, { th } from "@xstyled/styled-components";
-import { Box } from "../box";
+import styled, { css, th } from "@xstyled/styled-components";
 import type { StyledMenuItemProps } from "./types";
 
-export const StyledMenuItem = styled(Box)<StyledMenuItemProps>`
+export const StyledMenuItem = styled.liBox<StyledMenuItemProps>`
   padding: 1rem;
-  
+
   border: 2px solid transparent;
-  
+
   cursor: pointer;
-  
+
   transition: border-color 0.2s;
-    
+
+  ${({ $isHighlighted }) =>
+    $isHighlighted &&
+    css`
+      border-color: ${th("colors.blue-500")};
+    `}
   &:hover {
-    background-color: ${th("colors.gray-100")}
+    background-color: ${th("colors.gray-100")};
   }
 `;

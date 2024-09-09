@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<02814a0b04f32c2a351c5a419c046a58>>
+ * @generated SignedSource<<c7325fd71b289feb84330172f7cfff6d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -17,9 +17,6 @@ export type useVotationSubscription$data = {
     readonly id: string;
     readonly revealed: boolean;
     readonly started: boolean;
-    readonly votes: ReadonlyArray<{
-      readonly id: string;
-    }>;
   };
 };
 export type useVotationSubscription = {
@@ -35,14 +32,7 @@ var v0 = [
     "name": "votationId"
   }
 ],
-v1 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "id",
-  "storageKey": null
-},
-v2 = [
+v1 = [
   {
     "alias": null,
     "args": [
@@ -57,7 +47,13 @@ v2 = [
     "name": "onUpdatedVotation",
     "plural": false,
     "selections": [
-      (v1/*: any*/),
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "id",
+        "storageKey": null
+      },
       {
         "alias": null,
         "args": null,
@@ -71,18 +67,6 @@ v2 = [
         "kind": "ScalarField",
         "name": "started",
         "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "concreteType": "Vote",
-        "kind": "LinkedField",
-        "name": "votes",
-        "plural": true,
-        "selections": [
-          (v1/*: any*/)
-        ],
-        "storageKey": null
       }
     ],
     "storageKey": null
@@ -94,7 +78,7 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "useVotationSubscription",
-    "selections": (v2/*: any*/),
+    "selections": (v1/*: any*/),
     "type": "Subscription",
     "abstractKey": null
   },
@@ -103,19 +87,19 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "useVotationSubscription",
-    "selections": (v2/*: any*/)
+    "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "d997dacebc775379e591d97148ee7417",
+    "cacheID": "f4ace2a5f6eb8962d36a78d659e21a05",
     "id": null,
     "metadata": {},
     "name": "useVotationSubscription",
     "operationKind": "subscription",
-    "text": "subscription useVotationSubscription(\n  $votationId: ID!\n) {\n  onUpdatedVotation(votationId: $votationId) {\n    id\n    revealed\n    started\n    votes {\n      id\n    }\n  }\n}\n"
+    "text": "subscription useVotationSubscription(\n  $votationId: ID!\n) {\n  onUpdatedVotation(votationId: $votationId) {\n    id\n    revealed\n    started\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "c97b196528dcc92e3b0d305c79d138d8";
+(node as any).hash = "b4bdc65529333b5f2a1d4cdd09015926";
 
 export default node;

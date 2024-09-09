@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<8bdf9b9d617bc622508d1668eb303364>>
+ * @generated SignedSource<<014617360a2c12e1a367ae78b962e1f2>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,7 +14,7 @@ export type FieldFormVotingSystemRefetchQuery$variables = {
   search?: string | null | undefined;
 };
 export type FieldFormVotingSystemRefetchQuery$data = {
-  readonly " $fragmentSpreads": FragmentRefs<"fieldFormVotingSystems">;
+  readonly " $fragmentSpreads": FragmentRefs<"FieldFormVotingSystems">;
 };
 export type FieldFormVotingSystemRefetchQuery = {
   response: FieldFormVotingSystemRefetchQuery$data;
@@ -46,7 +46,7 @@ return {
       {
         "args": (v1/*: any*/),
         "kind": "FragmentSpread",
-        "name": "fieldFormVotingSystems"
+        "name": "FieldFormVotingSystems"
       }
     ],
     "type": "Query",
@@ -86,16 +86,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "eeffde18d99953d6cee14c7382ef8780",
+    "cacheID": "efcd19851ad74f50dd6ebf3b882017e1",
     "id": null,
     "metadata": {},
     "name": "FieldFormVotingSystemRefetchQuery",
     "operationKind": "query",
-    "text": "query FieldFormVotingSystemRefetchQuery(\n  $search: String = \"\"\n) {\n  ...fieldFormVotingSystems_40zwac\n}\n\nfragment fieldFormVotingSystems_40zwac on Query {\n  votingSystems(search: $search) {\n    id\n    name\n  }\n}\n"
+    "text": "query FieldFormVotingSystemRefetchQuery(\n  $search: String = \"\"\n) {\n  ...FieldFormVotingSystems_40zwac\n}\n\nfragment FieldFormVotingSystems_40zwac on Query {\n  votingSystems(search: $search) {\n    id\n    name\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "003692933c7846276e9d97ce2f1a9f1a";
+(node as any).hash = "fa94605c2e7b196c7826aacb2fa547f4";
 
 export default node;

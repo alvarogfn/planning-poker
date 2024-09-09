@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from "@nestjs/common";
+import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { InjectModel } from "@nestjs/mongoose";
 import { fromGlobalId } from "graphql-relay";
@@ -13,51 +13,55 @@ type ConnectionParams = { accessToken: string; location: string };
 
 @Injectable()
 export class AuthService implements OnModuleInit {
-	constructor(
-		private readonly notifierService: NotifierService,
-		private readonly jwtService: JwtService,
-		@InjectModel(PlayerEntity.name) private readonly playerModel: Model<PlayerDocument>,
-		@InjectModel(GameEntity.name) private readonly gameModel: Model<GameDocument>,
-	) {}
+  private readonly logger = new Logger(AuthService.name);
 
-	public decodeSync<T extends object>(accessToken: string): T {
-		return this.jwtService.verify<T>(accessToken);
-	}
+  constructor(
+    private readonly notifierService: NotifierService,
+    private readonly jwtService: JwtService,
+    @InjectModel(PlayerEntity.name) private readonly playerModel: Model<PlayerDocument>,
+    @InjectModel(GameEntity.name) private readonly gameModel: Model<GameDocument>,
+  ) {}
 
-	private extractGameId(location: string): string | null {
-		const gameId = location.split("/")[2];
+  public decodeSync<T extends object>(accessToken: string): T {
+    return this.jwtService.verify<T>(accessToken);
+  }
 
-		if (!gameId) return null;
+  private extractGameId(location: string): string | null {
+    const gameId = location.split("/")[2];
 
-		const { id } = fromGlobalId(gameId);
+    if (!gameId) return null;
 
-		return id;
-	}
+    const { id } = fromGlobalId(gameId);
 
-	public async decode<T extends object>(accessToken: string): Promise<T> {
-		return this.jwtService.verifyAsync<T>(accessToken);
-	}
+    return id;
+  }
 
-	private async updateStatus(data: ConnectionParams) {
-		const { id } = await this.decode<{ id: string }>(data.accessToken);
+  public async decode<T extends { id: string; name: string }>(accessToken: string): Promise<T> {
+    return this.jwtService.verifyAsync<T>(accessToken);
+  }
 
-		const gameId = this.extractGameId(data.location);
-		if (!gameId) return;
+  private async addOnGame(data: ConnectionParams) {
+    this.logger.log("Listening on Connect");
 
-		const updatedGame = await this.gameModel.findByIdAndUpdate(
-			toObjectId(gameId),
-			{
-				$addToSet: {
-					players: toObjectId(id),
-				},
-			},
-			{ new: true },
-		);
+    const { id } = await this.decode(data.accessToken);
 
-		await pubSub.publish("onUpdatedGame", { onUpdatedGame: updatedGame });
-	}
+    const gameId = this.extractGameId(data.location);
+    if (!gameId) return;
 
-	onModuleInit() {
-		this.notifierService.subscribe("onConnect", async (data: ConnectionParams) => this.updateStatus(data));
-	}
+    const updatedGame = await this.gameModel.findByIdAndUpdate(
+      toObjectId(gameId),
+      {
+        $addToSet: {
+          players: toObjectId(id),
+        },
+      },
+      { new: true },
+    );
+
+    await pubSub.publish("onUpdatedGame", { onUpdatedGame: updatedGame });
+  }
+
+  onModuleInit() {
+    this.notifierService.subscribe("onConnect", async (data: ConnectionParams) => this.addOnGame(data));
+  }
 }

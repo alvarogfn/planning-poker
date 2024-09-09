@@ -1,3 +1,3 @@
-export { default as Tooltip } from "./popover";
-export * from "./types";
+export { default as Popover } from "./popover";
 export * from "./styles";
+export * from "./types";

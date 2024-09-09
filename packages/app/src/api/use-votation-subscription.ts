@@ -7,29 +7,26 @@ const useVotationSubscriptionGraphql = graphql`
       id
       revealed
       started
-			votes {
-				id
-			} 
     }
   }
 `;
 
 type UseVoteSubscriptionParams = {
-	votationId: string;
+  votationId: string;
 };
 
 function useVotationSubscription({ votationId }: UseVoteSubscriptionParams) {
-	const config = useMemo(
-		() => ({
-			subscription: useVotationSubscriptionGraphql,
-			variables: {
-				votationId,
-			},
-		}),
-		[votationId],
-	);
+  const config = useMemo(
+    () => ({
+      subscription: useVotationSubscriptionGraphql,
+      variables: {
+        votationId,
+      },
+    }),
+    [votationId],
+  );
 
-	return useSubscription(config);
+  return useSubscription(config);
 }
 
 export default useVotationSubscription;

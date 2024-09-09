@@ -10,55 +10,71 @@ import { NodeIdPipe } from "@/game/pipes/node-id-pipe.service";
 import { VoteService } from "@/game/services/vote.service";
 import { pubSub } from "@/game/subscriptions/pub-sub";
 import { compare } from "@/helpers/compare";
+import { DeepPartial } from "@/helpers/deep-partial";
 
 @Resolver(() => Vote)
 export class VoteResolver {
-	constructor(private readonly voteService: VoteService) {}
+  constructor(private readonly voteService: VoteService) {}
 
-	@Subscription(() => Vote, {
-		filter: (payload, variables) => {
-			const votation = fromGlobalId(variables.votationId);
-			return compare(votation.id, payload.votationId);
-		},
-	})
-	public async onNewVote(@Args({ name: "votationId", type: () => ID }) _votationId: string) {
-		return pubSub.asyncIterator("newVote");
-	}
+  @Subscription(() => Vote, {
+    filter: (payload, variables) => {
+      const vote = fromGlobalId(variables.voteId);
+      return compare(vote.id, payload.onNewVote.id);
+    },
+  })
+  public onNewVote(@Args({ name: "voteId", type: () => ID }) _voteId: string) {
+    return pubSub.asyncIterator("newVote");
+  }
 
-	@UseGuards(AuthGuard)
-	@Query(() => Vote)
-	public async vote(@Args({ name: "id", type: () => ID }, NodeIdPipe) id: string) {
-		return this.voteService.findById(id);
-	}
+  @UseGuards(AuthGuard)
+  @Query(() => Vote)
+  public async vote(@Args({ name: "id", type: () => ID }, NodeIdPipe) id: string) {
+    return this.voteService.findById(id);
+  }
 
-	@UseGuards(AuthGuard)
-	@Mutation(() => Vote)
-	public async createVote(@Args("voteInput") { card, votationId }: VoteInput, @Session() viewer: Player) {
-		const votation = fromGlobalId(votationId);
+  @UseGuards(AuthGuard)
+  @Query(() => Vote)
+  public async playerVote(
+    @Args({ name: "playerId", type: () => ID }, NodeIdPipe) playerId: string,
+    @Args({ name: "votationId", type: () => ID }, NodeIdPipe) votationId: string,
+  ): Promise<DeepPartial<Vote>> {
+    const data = await this.voteService.playerVotationFindById(playerId, votationId);
+    return data;
+  }
 
-		const vote = await this.voteService.createVote({ card, playerId: viewer.id, votationId: votation.id });
-		const newVotation = await this.voteService.votationFindById(vote as Vote);
+  @UseGuards(AuthGuard)
+  @Mutation(() => Vote)
+  public async createVote(@Args("voteInput") { card, votationId }: VoteInput, @Session() viewer: Player) {
+    const votation = fromGlobalId(votationId);
 
-		await pubSub.publish("onUpdatedVotation", { onUpdatedVotation: newVotation });
-		await pubSub.publish("newVote", { onNewVote: vote, votationId: votation.id });
+    const vote = await this.voteService.createVote({
+      card,
+      playerId: viewer.id,
+      votationId: votation.id,
+    });
 
-		return vote;
-	}
+    await pubSub.publish("newVote", {
+      onNewVote: vote,
+      votationId: votation.id,
+    });
 
-	@ResolveField()
-	id(@Parent() vote: Vote) {
-		return toGlobalId("Vote", vote.id);
-	}
+    return vote;
+  }
 
-	@ResolveField()
-	public async revealed(@Parent() vote: Vote): Promise<boolean> {
-		const votation = await this.voteService.votationFindById(vote);
+  @ResolveField()
+  id(@Parent() vote: Vote) {
+    return toGlobalId("Vote", vote.id);
+  }
 
-		return votation.revealed;
-	}
+  @ResolveField()
+  public async revealed(@Parent() vote: Vote): Promise<boolean> {
+    const votation = await this.voteService.votationFindById(vote);
 
-	@ResolveField()
-	public async player(@Parent() vote: Vote): Promise<DeepPartial<Player>> {
-		return this.voteService.playerFindById(vote);
-	}
+    return votation.revealed;
+  }
+
+  @ResolveField()
+  public async player(@Parent() vote: Vote): Promise<DeepPartial<Player>> {
+    return this.voteService.playerFindById(vote);
+  }
 }

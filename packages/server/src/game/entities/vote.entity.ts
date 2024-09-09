@@ -8,21 +8,21 @@ export type VoteDocument = mongoose.HydratedDocument<Vote>;
 
 @Schema()
 export class Vote {
-	id: number;
+  id: number;
 
-	@Prop({ ref: "Player", type: mongoose.Types.ObjectId })
-	player: Player;
+  @Prop({ ref: "Player", type: mongoose.Types.ObjectId })
+  player: Player;
 
-	@Prop({ default: null })
-	card: number | null;
+  @Prop({ default: null })
+  card: number | null;
 
-	@Prop({ ref: "Votation", type: mongoose.Types.ObjectId })
-	votation: Votation;
+  @Prop({ ref: "Votation", type: mongoose.Types.ObjectId })
+  votation: Votation;
 }
 
 const VoteSchema = withVirtualId(SchemaFactory.createForClass(Vote));
 
 export default {
-	name: Vote.name,
-	schema: VoteSchema,
+  name: Vote.name,
+  schema: VoteSchema,
 };

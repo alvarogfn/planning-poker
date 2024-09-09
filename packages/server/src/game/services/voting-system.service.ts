@@ -1,37 +1,30 @@
-import {Injectable} from "@nestjs/common";
-import {InjectModel} from "@nestjs/mongoose";
-import {Model} from "mongoose";
-import {VotingSystem} from "@/game/models/voting-system.model";
-import VotingSystemEntity, {VotingSystemDocument} from "@/game/entities/voting-system.entity";
+import { Injectable, Logger } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
+import VotingSystemEntity, { VotingSystemDocument } from "@/game/entities/voting-system.entity";
+import { VotingSystem } from "@/game/models/voting-system.model";
+import { DeepPartial } from "@/helpers/deep-partial";
 
 @Injectable()
 export class VotingSystemService {
-  constructor(@InjectModel(VotingSystemEntity.name) private readonly votingSystemModel: Model<VotingSystemDocument>) {
-  }
+  private readonly logger = new Logger(VotingSystemService.name);
+
+  constructor(
+    @InjectModel(VotingSystemEntity.name)
+    private readonly votingSystemModel: Model<VotingSystemDocument>,
+  ) {}
 
   public async findById(id: string): Promise<DeepPartial<VotingSystem>> {
-    return this.votingSystemModel.findById(id).sort({cards: 'asc'});
+    const votingSystem = await this.votingSystemModel.findById(id);
+
+    return Object.assign(votingSystem, { cards: votingSystem.cards.sort((a, b) => a - b) });
   }
 
-  public async findAll(search?: string): Promise<VotingSystem[]> {
-    let votingSystems: VotingSystemDocument[];
+  public async findAll(search?: string): Promise<DeepPartial<VotingSystem>[]> {
+    const sanitizedSearch = search.replaceAll(/[^\s\w]/gi, "").replace(" ", ".+");
 
-    const sanitizedSearch = search.replaceAll(/[^\s\w]/gi, '').replace(" ", '.+');
+    const filter = sanitizedSearch ? { name: { $options: "i", $regex: sanitizedSearch } } : undefined;
 
-    if (sanitizedSearch) {
-      this.votingSystemModel
-          .find({
-            search: {$options: "i", $regex: sanitizedSearch},
-          })
-          .exec();
-    } else {
-      votingSystems = await this.votingSystemModel.find().exec();
-    }
-
-    return votingSystems.map((votingSystem) => ({
-      cards: votingSystem.cards,
-      id: votingSystem._id.toString(),
-      name: votingSystem.name,
-    }));
+    return this.votingSystemModel.find(filter);
   }
 }

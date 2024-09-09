@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b157ae51bb146c4ed9de984c0f5861af>>
+ * @generated SignedSource<<e496aec5d76ff3f8f90f79edd99e6349>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,16 +10,16 @@
 
 import { ReaderFragment, RefetchableFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type fieldFormVotingSystems$data = {
+export type FieldFormVotingSystems$data = {
   readonly votingSystems: ReadonlyArray<{
     readonly id: string;
     readonly name: string;
   }>;
-  readonly " $fragmentType": "fieldFormVotingSystems";
+  readonly " $fragmentType": "FieldFormVotingSystems";
 };
-export type fieldFormVotingSystems$key = {
-  readonly " $data"?: fieldFormVotingSystems$data;
-  readonly " $fragmentSpreads": FragmentRefs<"fieldFormVotingSystems">;
+export type FieldFormVotingSystems$key = {
+  readonly " $data"?: FieldFormVotingSystems$data;
+  readonly " $fragmentSpreads": FragmentRefs<"FieldFormVotingSystems">;
 };
 
 import FieldFormVotingSystemRefetchQuery_graphql from './FieldFormVotingSystemRefetchQuery.graphql';
@@ -40,7 +40,7 @@ const node: ReaderFragment = {
       "operation": FieldFormVotingSystemRefetchQuery_graphql
     }
   },
-  "name": "fieldFormVotingSystems",
+  "name": "FieldFormVotingSystems",
   "selections": [
     {
       "alias": null,
@@ -78,6 +78,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "003692933c7846276e9d97ce2f1a9f1a";
+(node as any).hash = "fa94605c2e7b196c7826aacb2fa547f4";
 
 export default node;

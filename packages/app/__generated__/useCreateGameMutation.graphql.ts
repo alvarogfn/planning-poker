@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<0c2c338bfb3c544076d819de58eacccc>>
+ * @generated SignedSource<<9718d3d6b8028731d5fac34e270e3b85>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -18,7 +18,16 @@ export type useCreateGameMutation$variables = {
 };
 export type useCreateGameMutation$data = {
   readonly createGame: {
+    readonly __typename: "Game";
     readonly id: string;
+  } | {
+    readonly __typename: "Mistake";
+    readonly message: string;
+    readonly status: string;
+  } | {
+    // This will never be '%other', but we need some
+    // value in case none of the concrete values match.
+    readonly __typename: "%other";
   };
 };
 export type useCreateGameMutation = {
@@ -36,37 +45,76 @@ var v0 = [
 ],
 v1 = [
   {
+    "kind": "Variable",
+    "name": "createGameInput",
+    "variableName": "createGameInput"
+  }
+],
+v2 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "__typename",
+  "storageKey": null
+},
+v3 = [
+  {
     "alias": null,
-    "args": [
-      {
-        "kind": "Variable",
-        "name": "createGameInput",
-        "variableName": "createGameInput"
-      }
-    ],
-    "concreteType": "Game",
-    "kind": "LinkedField",
-    "name": "createGame",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "id",
-        "storageKey": null
-      }
-    ],
+    "args": null,
+    "kind": "ScalarField",
+    "name": "id",
     "storageKey": null
   }
-];
+],
+v4 = {
+  "kind": "InlineFragment",
+  "selections": (v3/*: any*/),
+  "type": "Game",
+  "abstractKey": null
+},
+v5 = {
+  "kind": "InlineFragment",
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "message",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "status",
+      "storageKey": null
+    }
+  ],
+  "type": "Mistake",
+  "abstractKey": null
+};
 return {
   "fragment": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
     "name": "useCreateGameMutation",
-    "selections": (v1/*: any*/),
+    "selections": [
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": null,
+        "kind": "LinkedField",
+        "name": "createGame",
+        "plural": false,
+        "selections": [
+          (v2/*: any*/),
+          (v4/*: any*/),
+          (v5/*: any*/)
+        ],
+        "storageKey": null
+      }
+    ],
     "type": "Mutation",
     "abstractKey": null
   },
@@ -75,19 +123,40 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "useCreateGameMutation",
-    "selections": (v1/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": null,
+        "kind": "LinkedField",
+        "name": "createGame",
+        "plural": false,
+        "selections": [
+          (v2/*: any*/),
+          (v4/*: any*/),
+          (v5/*: any*/),
+          {
+            "kind": "InlineFragment",
+            "selections": (v3/*: any*/),
+            "type": "Node",
+            "abstractKey": "__isNode"
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "7ad9eb1536b6c447ba527438e1e0487f",
+    "cacheID": "bcf0fa010b1ec59f5b5701301f7a2474",
     "id": null,
     "metadata": {},
     "name": "useCreateGameMutation",
     "operationKind": "mutation",
-    "text": "mutation useCreateGameMutation(\n  $createGameInput: CreateGameInput!\n) {\n  createGame(createGameInput: $createGameInput) {\n    id\n  }\n}\n"
+    "text": "mutation useCreateGameMutation(\n  $createGameInput: CreateGameInput!\n) {\n  createGame(createGameInput: $createGameInput) {\n    __typename\n    ... on Game {\n      id\n    }\n    ... on Mistake {\n      message\n      status\n    }\n    ... on Node {\n      __isNode: __typename\n      id\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "de2eebc8d91f298cc429d14d89a0a5c1";
+(node as any).hash = "eb6d2da19b38f72b1b703ab4f18e96b2";
 
 export default node;

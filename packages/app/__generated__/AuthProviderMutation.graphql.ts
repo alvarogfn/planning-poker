@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<03f614072f51d82020038cc181752164>>
+ * @generated SignedSource<<4870a3b9c294a8dc1556ad25f53d60fa>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,8 +12,13 @@ import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type AuthProviderMutation$variables = Record<PropertyKey, never>;
 export type AuthProviderMutation$data = {
   readonly signIn: {
-    readonly message?: string;
-    readonly status?: number;
+    readonly __typename: "Mistake";
+    readonly message: string;
+    readonly status: string;
+  } | {
+    // This will never be '%other', but we need some
+    // value in case none of the concrete values match.
+    readonly __typename: "%other";
   };
 };
 export type AuthProviderMutation = {
@@ -22,47 +27,54 @@ export type AuthProviderMutation = {
 };
 
 const node: ConcreteRequest = (function(){
-var v0 = {
-  "kind": "InlineFragment",
-  "selections": [
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "status",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "message",
-      "storageKey": null
-    }
-  ],
-  "type": "Mistake",
-  "abstractKey": null
-};
+var v0 = [
+  {
+    "alias": null,
+    "args": null,
+    "concreteType": null,
+    "kind": "LinkedField",
+    "name": "signIn",
+    "plural": false,
+    "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "__typename",
+        "storageKey": null
+      },
+      {
+        "kind": "InlineFragment",
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "status",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "message",
+            "storageKey": null
+          }
+        ],
+        "type": "Mistake",
+        "abstractKey": null
+      }
+    ],
+    "storageKey": null
+  }
+];
 return {
   "fragment": {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
     "name": "AuthProviderMutation",
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "concreteType": null,
-        "kind": "LinkedField",
-        "name": "signIn",
-        "plural": false,
-        "selections": [
-          (v0/*: any*/)
-        ],
-        "storageKey": null
-      }
-    ],
+    "selections": (v0/*: any*/),
     "type": "Mutation",
     "abstractKey": null
   },
@@ -71,27 +83,7 @@ return {
     "argumentDefinitions": [],
     "kind": "Operation",
     "name": "AuthProviderMutation",
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "concreteType": null,
-        "kind": "LinkedField",
-        "name": "signIn",
-        "plural": false,
-        "selections": [
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "__typename",
-            "storageKey": null
-          },
-          (v0/*: any*/)
-        ],
-        "storageKey": null
-      }
-    ]
+    "selections": (v0/*: any*/)
   },
   "params": {
     "cacheID": "145805560d0584db9b655733c0a793a1",
@@ -104,6 +96,6 @@ return {
 };
 })();
 
-(node as any).hash = "e80dc9cca0eb7b595b6c94930e73e58c";
+(node as any).hash = "f66c718dd6b638e0f23dd6ba5bc12837";
 
 export default node;

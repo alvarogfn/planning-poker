@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6a7220ac183bb38451245d6439ab07d2>>
+ * @generated SignedSource<<35b96df1993ca0718b0fde8959d2d85d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,16 +10,17 @@
 
 import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime';
 export type useVoteSubscription$variables = {
-  votationId: string;
+  voteId: string;
 };
 export type useVoteSubscription$data = {
   readonly onNewVote: {
-    readonly card: number;
+    readonly card: number | null | undefined;
     readonly id: string;
     readonly player: {
       readonly id: string;
       readonly name: string;
     };
+    readonly revealed: boolean;
   };
 };
 export type useVoteSubscription = {
@@ -32,7 +33,7 @@ var v0 = [
   {
     "defaultValue": null,
     "kind": "LocalArgument",
-    "name": "votationId"
+    "name": "voteId"
   }
 ],
 v1 = {
@@ -48,8 +49,8 @@ v2 = [
     "args": [
       {
         "kind": "Variable",
-        "name": "votationId",
-        "variableName": "votationId"
+        "name": "voteId",
+        "variableName": "voteId"
       }
     ],
     "concreteType": "Vote",
@@ -63,6 +64,13 @@ v2 = [
         "args": null,
         "kind": "ScalarField",
         "name": "card",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "revealed",
         "storageKey": null
       },
       {
@@ -106,16 +114,16 @@ return {
     "selections": (v2/*: any*/)
   },
   "params": {
-    "cacheID": "0a288875027d786333ab09b62c9a067a",
+    "cacheID": "4b6725c7df9432cd1137c74cb38b020a",
     "id": null,
     "metadata": {},
     "name": "useVoteSubscription",
     "operationKind": "subscription",
-    "text": "subscription useVoteSubscription(\n  $votationId: ID!\n) {\n  onNewVote(votationId: $votationId) {\n    id\n    card\n    player {\n      name\n      id\n    }\n  }\n}\n"
+    "text": "subscription useVoteSubscription(\n  $voteId: ID!\n) {\n  onNewVote(voteId: $voteId) {\n    id\n    card\n    revealed\n    player {\n      name\n      id\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "595292793334073e9a184d17b99a61b7";
+(node as any).hash = "c4a71783536677f89a8bb142a2019616";
 
 export default node;

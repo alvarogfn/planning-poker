@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5a235cd333a7d0f9194e8a2f72e5f4ea>>
+ * @generated SignedSource<<8e79592882bf23d2a6586e988deb19a6>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,13 +10,13 @@
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type useFetchCreatePageDataQuery$variables = Record<PropertyKey, never>;
-export type useFetchCreatePageDataQuery$data = {
-  readonly " $fragmentSpreads": FragmentRefs<"fieldFormVotingSystems">;
+export type CreatePageQuery$variables = Record<PropertyKey, never>;
+export type CreatePageQuery$data = {
+  readonly " $fragmentSpreads": FragmentRefs<"FieldFormVotingSystems">;
 };
-export type useFetchCreatePageDataQuery = {
-  response: useFetchCreatePageDataQuery$data;
-  variables: useFetchCreatePageDataQuery$variables;
+export type CreatePageQuery = {
+  response: CreatePageQuery$data;
+  variables: CreatePageQuery$variables;
 };
 
 const node: ConcreteRequest = {
@@ -24,12 +24,12 @@ const node: ConcreteRequest = {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
-    "name": "useFetchCreatePageDataQuery",
+    "name": "CreatePageQuery",
     "selections": [
       {
         "args": null,
         "kind": "FragmentSpread",
-        "name": "fieldFormVotingSystems"
+        "name": "FieldFormVotingSystems"
       }
     ],
     "type": "Query",
@@ -39,7 +39,7 @@ const node: ConcreteRequest = {
   "operation": {
     "argumentDefinitions": [],
     "kind": "Operation",
-    "name": "useFetchCreatePageDataQuery",
+    "name": "CreatePageQuery",
     "selections": [
       {
         "alias": null,
@@ -75,15 +75,15 @@ const node: ConcreteRequest = {
     ]
   },
   "params": {
-    "cacheID": "a80340afd143c66d0c06fd60d756d7f0",
+    "cacheID": "2495d5a74eae55ea0b824d9ba77a1aad",
     "id": null,
     "metadata": {},
-    "name": "useFetchCreatePageDataQuery",
+    "name": "CreatePageQuery",
     "operationKind": "query",
-    "text": "query useFetchCreatePageDataQuery {\n  ...fieldFormVotingSystems\n}\n\nfragment fieldFormVotingSystems on Query {\n  votingSystems(search: \"\") {\n    id\n    name\n  }\n}\n"
+    "text": "query CreatePageQuery {\n  ...FieldFormVotingSystems\n}\n\nfragment FieldFormVotingSystems on Query {\n  votingSystems(search: \"\") {\n    id\n    name\n  }\n}\n"
   }
 };
 
-(node as any).hash = "262dd3baa40b2d4647a8230d03073f3b";
+(node as any).hash = "b7a4c3de4391e63033a3165b033d6dd1";
 
 export default node;

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1917965ebc6989a339829c78a3bca3e7>>
+ * @generated SignedSource<<8b048a7c140b3b6d1e431bbeec5fe9d2>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,7 +16,7 @@ export type useSignInMutation$data = {
   readonly signUp: {
     readonly __typename: "Mistake";
     readonly message: string;
-    readonly status: number;
+    readonly status: string;
   } | {
     // This will never be '%other', but we need some
     // value in case none of the concrete values match.

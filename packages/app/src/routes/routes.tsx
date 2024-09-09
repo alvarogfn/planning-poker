@@ -1,60 +1,60 @@
-import LoadingPage from "@/pages/loading";
-import { useAuthContext } from "@/providers/AuthProvider";
 import type { Router } from "@remix-run/router";
 import { lazy } from "react";
-import { Navigate, Outlet, createBrowserRouter, useLocation } from "react-router-dom";
+import { createBrowserRouter, Navigate, Outlet, useLocation } from "react-router-dom";
+import { useAuthContext } from "@/providers/AuthProvider";
+import LoadingPage from "@/pages/loading";
 
-const HomePage = lazy(() => import("@/pages/home"));
-const HomeDefaultPage = lazy(() => import("@/pages/home/default"));
-const CreateGamePage = lazy(() => import("@/pages/create/create-page"));
-const GamePage = lazy(() => import("@/pages/game/GamePage"));
-const SignInPage = lazy(() => import("@/pages/sign-in/sign-in-page"));
+const HomePage = lazy(async () => import("@/pages/home"));
+const HomeDefaultPage = lazy(async () => import("@/pages/home/default"));
+const CreateGamePage = lazy(async () => import("@/pages/create/CreatePage"));
+const GamePage = lazy(async () => import("@/pages/game/GamePage"));
+const SignInPage = lazy(async () => import("@/pages/sign-in/sign-in-page"));
 
-const AuthenticationRoute = () => {
-	const location = useLocation();
-	const { isAuth, isAuthenticating } = useAuthContext();
+function AuthenticationRoute() {
+  const location = useLocation();
+  const { isAuth, isAuthenticating } = useAuthContext();
 
-	if (isAuthenticating) return <LoadingPage />;
+  if (isAuthenticating) return <LoadingPage />;
 
-	if (!isAuth) {
-		return <Navigate to="/sign-in" state={{ redirectTo: location }} />;
-	}
+  if (!isAuth) {
+    return <Navigate state={{ redirectTo: location }} to="/sign-in" />;
+  }
 
-	return <Outlet />;
-};
+  return <Outlet />;
+}
 
 const routes: Router = createBrowserRouter([
-	{
-		path: "/",
-		element: <AuthenticationRoute />,
-		children: [
-			{
-				path: "/",
-				element: <HomePage />,
-				children: [
-					{
-						path: "/",
-						element: <HomeDefaultPage />,
-					},
-					{
-						path: "/new-game",
-						element: <CreateGamePage />,
-					},
-					{
-						path: "/join-game",
-					},
-				],
-			},
-			{
-				path: "/game/:gameId",
-				element: <GamePage />,
-			},
-		],
-	},
-	{
-		path: "/sign-in",
-		element: <SignInPage />,
-	},
+  {
+    children: [
+      {
+        children: [
+          {
+            element: <HomeDefaultPage />,
+            path: "/",
+          },
+          {
+            element: <CreateGamePage />,
+            path: "/new-game",
+          },
+          {
+            path: "/join-game",
+          },
+        ],
+        element: <HomePage />,
+        path: "/",
+      },
+      {
+        element: <GamePage />,
+        path: "/game/:gameId",
+      },
+    ],
+    element: <AuthenticationRoute />,
+    path: "/",
+  },
+  {
+    element: <SignInPage />,
+    path: "/sign-in",
+  },
 ]);
 
 export default routes;

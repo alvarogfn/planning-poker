@@ -12,6 +12,8 @@ type Credentials {
   player: Player!
 }
 
+union CredentialsOrMistake = Credentials | Mistake
+
 type Game implements Node {
   createdBy: Player!
   currentVotation: Votation!
@@ -25,16 +27,16 @@ union GameOrMistake = Game | Mistake
 
 type Mistake {
   message: String!
-  status: Int!
+  status: String!
 }
 
 type Mutation {
-  createGame(createGameInput: CreateGameInput!): Game!
+  createGame(createGameInput: CreateGameInput!): GameOrMistake!
   createVote(voteInput: VoteInput!): Vote!
   newVotation(id: ID!): GameOrMistake!
   revealVotation(votationId: ID!): Votation!
-  signIn: SignInCredentials!
-  signUp(name: String! = ""): Credentials!
+  signIn: CredentialsOrMistake!
+  signUp(name: String! = ""): CredentialsOrMistake!
   startVotation(votationId: ID!): Votation!
   updateGameName(updateGameNameInput: UpdateGameNameInput!): GameOrMistake!
   updateName(name: String!): Player!
@@ -53,16 +55,15 @@ type Query {
   game(id: ID!): GameOrMistake!
   node(id: ID!): Node
   player(id: String!): Player!
-  viewer(gameId: ID!): Viewer!
+  playerVote(playerId: ID!, votationId: ID!): Vote!
+  viewer(gameId: ID): Viewer!
   vote(id: ID!): Vote!
   votingSystem(id: String!): VotingSystem!
   votingSystems(search: String): [VotingSystem!]!
 }
 
-union SignInCredentials = Credentials | Mistake
-
 type Subscription {
-  onNewVote(votationId: ID!): Vote!
+  onNewVote(voteId: ID!): Vote!
   onUpdatedGame(id: ID!): Game!
   onUpdatedVotation(votationId: ID!): Votation!
 }
@@ -92,7 +93,7 @@ type Votation implements Node {
 }
 
 type Vote implements Node {
-  card: Float!
+  card: Float
   id: ID!
   player: Player!
   revealed: Boolean!

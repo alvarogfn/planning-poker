@@ -1,8 +1,10 @@
-import { Module } from "@nestjs/common";
-import { NotifierService } from "./notifier.service";
+import {Module} from "@nestjs/common";
+import {NotifierService} from "./notifier.service";
 
 @Module({
-	exports: [NotifierService],
-	providers: [NotifierService],
+
+  exports: [NotifierService],
+  providers: [NotifierService],
 })
-export class NotifierModule {}
+export class NotifierModule {
+}

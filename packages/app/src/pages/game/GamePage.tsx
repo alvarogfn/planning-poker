@@ -1,26 +1,25 @@
 import { GamePageQueryGraphqlQuery } from "generated/GamePageQueryGraphqlQuery.graphql";
 import { graphql, useLazyLoadQuery } from "react-relay";
 import { Navigate, useParams } from "react-router-dom";
+import { GameSettingsPopover } from "src/pages/game/components/GameSettingsPopover";
 import useGameUpdatedSubscription from "@/api/use-game-updated-subscription";
 import { Box } from "@/components/box";
-import GameCardDeckTable from "@/pages/game/components/game-card-deck-table/GameCardDeckTable";
-import { GameSettingsPopover } from "@/pages/game/components/game-settings-popover";
+import GameViewerDeck from "@/pages/game/components/game-viewer-deck/GameViewerDeck";
 import { GameVotationTable } from "@/pages/game/components/game-votation-table";
 
 const GamePageQueryGraphql = graphql`
   query GamePageQueryGraphqlQuery($id: ID!) {
-    viewer(gameId: $id) {
-      player {
-        id
-      }
-    }
     game(id: $id) {
+      __typename
       ... on Game {
+        ...GameViewerDeckFragment
         players {
           id
         }
+        currentVotation {
+          ...GameTableActionsFragment
+        }
         ...GameSettingsPopoverFragment
-        ...GameCardDeckTableFragment
         ...GameVotationTableFragment
       }
       ... on Mistake {
@@ -34,16 +33,13 @@ const GamePageQueryGraphql = graphql`
 function GamePage() {
   const { gameId = "" } = useParams();
 
-  const data = useLazyLoadQuery<GamePageQueryGraphqlQuery>(
-    GamePageQueryGraphql,
-    {
-      id: gameId,
-    },
-  );
+  const { game } = useLazyLoadQuery<GamePageQueryGraphqlQuery>(GamePageQueryGraphql, {
+    id: gameId,
+  });
 
   useGameUpdatedSubscription({ gameId });
 
-  if (data.game.message) return <Navigate to="/404" />;
+  if (game.__typename !== "Game") return <Navigate to="/404" />;
 
   return (
     <Box
@@ -56,18 +52,11 @@ function GamePage() {
       overflow="hidden"
       w="100vw"
     >
-      <Box
-        alignItems="center"
-        as="header"
-        display="flex"
-        flexDirection="row"
-        justifyContent="space-between"
-        p={5}
-      >
-        <GameSettingsPopover fragmentKey={data.game} />
+      <Box alignItems="center" as="header" display="flex" flexDirection="row" justifyContent="space-between" p={5}>
+        <GameSettingsPopover game={game} />
       </Box>
-      <GameVotationTable fragmentKey={data.game} />
-      <GameCardDeckTable fragmentKey={data.game} />
+      <GameVotationTable game={game} />
+      <GameViewerDeck game={game} />
     </Box>
   );
 }

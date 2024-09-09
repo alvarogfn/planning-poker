@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4bbcf6a375d4d6eeca4fe6dc919ddfcc>>
+ * @generated SignedSource<<a1196844f58c1eb398c7efca29456556>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,18 +14,10 @@ export type GameVotationTableFragment$data = {
   readonly currentVotation: {
     readonly id: string;
     readonly revealed: boolean;
-    readonly votes: ReadonlyArray<{
-      readonly id: string;
-      readonly player: {
-        readonly id: string;
-      };
-      readonly " $fragmentSpreads": FragmentRefs<"GameViewerDeckCardFragment">;
-    }>;
     readonly " $fragmentSpreads": FragmentRefs<"GameTableActionsFragment">;
   };
   readonly players: ReadonlyArray<{
     readonly id: string;
-    readonly name: string;
   }>;
   readonly " $fragmentType": "GameVotationTableFragment";
 };
@@ -56,13 +48,6 @@ return {
       "name": "players",
       "plural": true,
       "selections": [
-        {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "name",
-          "storageKey": null
-        },
         (v0/*: any*/)
       ],
       "storageKey": null
@@ -87,36 +72,7 @@ return {
           "name": "revealed",
           "storageKey": null
         },
-        (v0/*: any*/),
-        {
-          "alias": null,
-          "args": null,
-          "concreteType": "Vote",
-          "kind": "LinkedField",
-          "name": "votes",
-          "plural": true,
-          "selections": [
-            {
-              "alias": null,
-              "args": null,
-              "concreteType": "Player",
-              "kind": "LinkedField",
-              "name": "player",
-              "plural": false,
-              "selections": [
-                (v0/*: any*/)
-              ],
-              "storageKey": null
-            },
-            {
-              "args": null,
-              "kind": "FragmentSpread",
-              "name": "GameViewerDeckCardFragment"
-            },
-            (v0/*: any*/)
-          ],
-          "storageKey": null
-        }
+        (v0/*: any*/)
       ],
       "storageKey": null
     }
@@ -126,6 +82,6 @@ return {
 };
 })();
 
-(node as any).hash = "cd854b72343b903d24f96efbca475bc4";
+(node as any).hash = "e753173c090226a173a914db0bfcadc2";
 
 export default node;

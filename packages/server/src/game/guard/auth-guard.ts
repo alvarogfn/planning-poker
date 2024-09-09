@@ -1,23 +1,26 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
+import { CanActivate, ExecutionContext, Injectable, Logger, UnauthorizedException } from "@nestjs/common";
 import { GqlExecutionContext } from "@nestjs/graphql";
 import { GraphQLContext } from "@/config/gql.config";
 import { AuthService } from "@/game/services/auth.service";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-	constructor(private readonly authService: AuthService) {}
+  private readonly Logger = new Logger(AuthGuard.name);
 
-	async canActivate(exec: ExecutionContext) {
-		const context = GqlExecutionContext.create(exec).getContext<GraphQLContext>();
+  constructor(private readonly authService: AuthService) {}
 
-		const {accessToken} = context.req.cookies;
+  async canActivate(exec: ExecutionContext) {
+    const context = GqlExecutionContext.create(exec).getContext<GraphQLContext>();
 
-		try {
-			Object.assign(context, { session: await this.authService.decode(accessToken) });
-		} catch {
-			throw new UnauthorizedException();
-		}
+    const { accessToken } = context.req.cookies;
 
-		return true;
-	}
+    try {
+      const session = await this.authService.decode(accessToken);
+      Object.assign(context, { session });
+    } catch (error) {
+      throw new UnauthorizedException(error);
+    }
+
+    return true;
+  }
 }

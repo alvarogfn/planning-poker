@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
 import { MongooseModule } from "@nestjs/mongoose";
 import { GameResolver } from "src/game/resolvers/game.resolver";
@@ -22,30 +23,38 @@ import { VotingSystemService } from "@/game/services/voting-system.service";
 import { NotifierModule } from "@/notifier/notifier.module";
 
 @Module({
-	exports: [GameService, PlayerService, VotingSystemService, ViewerService, VoteService, VotationService],
-	imports: [
-		NotifierModule,
-		JwtModule.register({
-			global: true,
-			secret: "secret",
-			signOptions: { expiresIn: "365d" },
-		}),
-		MongooseModule.forFeature([PlayerEntity, GameEntity, VotingSystemEntity, VoteEntity, VotationEntity]),
-	],
-	providers: [
-		GameResolver,
-		PlayerResolver,
-		GameService,
-		PlayerService,
-		AuthService,
-		VotingSystemService,
-		VotingSystemResolver,
-		VoteService,
-		VoteResolver,
-		ViewerResolver,
-		ViewerService,
-		VotationService,
-		VotationResolver,
-	],
+  exports: [GameService, PlayerService, VotingSystemService, ViewerService, VoteService, VotationService],
+  imports: [
+    NotifierModule,
+    JwtModule.registerAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        global: true,
+        secret: configService.get<string>("secretKey"),
+        signOptions: { expiresIn: "365d" },
+      }),
+    }),
+    JwtModule.register({
+      global: true,
+      secret: "secret",
+      signOptions: { expiresIn: "365d" },
+    }),
+    MongooseModule.forFeature([PlayerEntity, GameEntity, VotingSystemEntity, VoteEntity, VotationEntity]),
+  ],
+  providers: [
+    GameResolver,
+    PlayerResolver,
+    GameService,
+    PlayerService,
+    AuthService,
+    VotingSystemService,
+    VotingSystemResolver,
+    VoteService,
+    VoteResolver,
+    ViewerResolver,
+    ViewerService,
+    VotationService,
+    VotationResolver,
+  ],
 })
 export class GameModule {}
