@@ -81,9 +81,6 @@ importers:
       '@floating-ui/react':
         specifier: 0.26.19
         version: 0.26.19(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@planning-poker/shared':
-        specifier: workspace:*
-        version: link:../shared
       '@xstyled/styled-components':
         specifier: 4.0.0
         version: 4.0.0(styled-components@6.1.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
@@ -263,24 +260,6 @@ importers:
       typescript:
         specifier: ^5.1.3
         version: 5.5.3
-
-  packages/shared:
-    devDependencies:
-      '@types/react':
-        specifier: ^18.3.5
-        version: 18.3.5
-      '@types/react-dom':
-        specifier: ^18.0.11
-        version: 18.3.0
-      react:
-        specifier: ^18.3.1
-        version: 18.3.1
-      react-dom:
-        specifier: ^18.3.1
-        version: 18.3.1(react@18.3.1)
-      typescript:
-        specifier: 5.5.4
-        version: 5.5.4
 
 packages:
 
@@ -1412,9 +1391,6 @@ packages:
 
   '@types/react@18.3.3':
     resolution: {integrity: sha512-hti/R0pS0q1/xx+TsI73XIqk26eBsISZ2R0wUijXIngRK9R/e7Xw/cXVxQK7R5JjW+SV4zGcn5hXjudkN/pLIw==}
-
-  '@types/react@18.3.5':
-    resolution: {integrity: sha512-WeqMfGJLGuLCqHGYRGHxnKrXcTitc6L/nBUWfWPcTarG3t9PsquqUMuVeXZeca+mglY4Vo5GZjCi0A3Or2lnxA==}
 
   '@types/relay-runtime@17.0.1':
     resolution: {integrity: sha512-Sz3QREVGiP3KSyBUsdNOazJryYd32u+sKoL7y1X4ffNlsCAEABVxBc5XzjzoRMo/XnyZXWNhVXee82pW7dAnFA==}
@@ -5947,11 +5923,6 @@ snapshots:
       '@types/relay-runtime': 17.0.1
 
   '@types/react@18.3.3':
-    dependencies:
-      '@types/prop-types': 15.7.12
-      csstype: 3.1.3
-
-  '@types/react@18.3.5':
     dependencies:
       '@types/prop-types': 15.7.12
       csstype: 3.1.3

@@ -35,10 +35,5 @@
   "include": [
     "src",
     "./__generated__"
-  ],
-  "references": [
-    {
-      "path": "../shared/tsconfig.json"
-    }
   ]
 }

@@ -1,7 +1,8 @@
 import styled, { css, th } from "@xstyled/styled-components";
 import type { StyledMenuItemProps } from "./types";
+import box from "@/components/box/box";
 
-export const StyledMenuItem = styled.liBox<StyledMenuItemProps>`
+export const StyledMenuItem = styled(box)<StyledMenuItemProps>`
   padding: 1rem;
 
   border: 2px solid transparent;
